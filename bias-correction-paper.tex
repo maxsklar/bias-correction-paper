@@ -181,6 +181,8 @@ Now with some algebraic manipuation, we can solve for \(\mathbf{P}(y_n|x_n,h,\ma
 \mathbf{P}(y_n|x_n,h,\mathbf{s})=f_h(x_n,y_n)\mathbf{s}(s_n,y_n)\left [\sum_{y \in Y}f_h(x_n,y)\mathbf{s}(x_n,y) \right ]^{-1} 
 \end{equation}
 
+For a continuous output space \(Y\), that would be an integral rather than a sum. The easy computation on the sum/integral term depends on the structure \(Y\), but is at least easy in the finite and small case.
+
 Here we can check our assumption that if the sampling function were constant \(\mathbf{s}(x,y)=p\) then we return to our old equation:
 
 \[\mathbf{P}(y_n|x_n,h,\mathbf{s})=f_h(x_n,y_n)\mathbf{s}(s_n,y_n)\left [\sum_{y \in Y}f_h(x_n,y)\mathbf{s}(x_n,y) \right ]^{-1} =f_h(x_n,y_n)p(p^{-1})\left [\sum_{y \in Y}f_h(x_n,y) \right ]^{-1} =f_h(x_n,y_n)\]
@@ -228,13 +230,21 @@ Typically in these cases, we want to focus on the probability that \(y_n = 1\), 
 
 \[\mathbf{P}(y_n=1|x_n,h,\mathbf{s})=\frac{e^{c+\mathbf{w} \cdot x_n}}{r_n+e^{c+\mathbf{w} \cdot x_n}} \]
 
-Here, \(r_n = \mathbf{s}(s_n,0)(\mathbf{s}(s_n,1))^{-1}\) is the true-to-false sample ratio for each instance \(n\). This ratio is all that's needed to compute results for the binary logistic regression case. Note that for \(r_n=1\), we are left with the usual binary logistic regression formula.
+Here, \(r_n = \mathbf{s}(s_n,0)(\mathbf{s}(s_n,1))^{-1}\) is the true-to-false sample ratio for each instance \(n\). This ratio is all that is needed to compute results for the binary logistic regression case. Note that for \(r_n=1\), we are left with the usual binary logistic regression formula.
 
 For the prior, we can use a Gaussian distribution (aka L2, or ridge regression) with weight \(\lambda\) so:
 
 \[\mathbf{r}(c,\mathbf{w})=\frac{1}{2}\lambda(\mathbf{w} \cdot \mathbf{w})\]
 
+We can put it together to compute a negative log-likelihood loss function. Some constant factors were dropped in this case.
 
+\[L(h)=\sum_{n \in  N} \left (\ln\left (r_n+e^{c+\mathbf{w} \cdot x_n}\right ) -y_n \cdot (c+\mathbf{w} \cdot x_n) \right )+ \frac{1}{2}\lambda(\mathbf{w} \cdot \mathbf{w})\]
+
+The derivative on a single weight \(\mathbf{w}_f\) can be computed to the following simple form, which is required for gradient descent and some versions of Markov Chain Monte Carlo.
+
+\[\frac{\partial}{\partial \mathbf{w}_f }L(h)=\sum_{n \in  N} \left(x_{n,f}\frac{e^{c+\mathbf{w} \cdot x_n}}{r_n+e^{c+\mathbf{w} \cdot x_n}} -y_n \cdot x_{n,f} \right )+ \lambda \cdot w_f\] 
+
+\[\frac{\partial}{\partial \mathbf{w}_f }L(h)= \sum_{n \in  N} x_{n,f}\left(\mathbf{P}(y_n=1|x_n,h,\mathbf{s}) -y_n  \right )+ \lambda \cdot w_f \]
 
 \section{Conclusions}
 
@@ -252,7 +262,9 @@ The paper Ely found that has the equation in it for Binary Logistic: < https://o
 
 It could also be interesting to extend this to multinomial regression for multi-category prediction, in a case where each category has its own downsampling ratio.
 
-The current references come from my 2014 paper on MLE for Dirichlet Prior
+Reference the most recently Foursquare patent. Find out when it is available.
+
+The following references come from my 2014 paper on MLE for Dirichlet Prior. They should be changed to what we want for this paper
 
 %\subsubsection*{References}
 
