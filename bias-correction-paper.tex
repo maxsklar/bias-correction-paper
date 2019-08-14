@@ -73,7 +73,14 @@ For all \(n \in N\), which is shorthand for \(n \in (0, 1, 2,\ldots,N-1)\), labe
 
 Now to select a prediction function, we create a hypothesis space \(H\) which contains all the predictors under consideration. In some setups, each hypothesis \(h \in H\) is a direct function from \(X\) to \(Y\), but here we assume that each hypothesis is a function of \(x \in X\) and returns a \textit{probability measure} over \(Y\).
 
-SOME notes on the generaliztion and also the \(f_h\) function
+While the equations in this paper generalize to all probability measures over \(Y\), we keep several cases in mind.
+\begin{enumerate}
+	\item Finite output spaces, or classification. This probability measure is the most familiar as it is simply a finite sum that adds to one.
+	\item Discrete but infinite output spaces, where the probabilities that add to one form an infinite sum.
+	\item Infinite and Continuous output spaces, where each hypothesis corresponds to a \textit{probability distribution function} (PDF) over \(Y\)
+\end{enumerate}
+
+Note that in all these cases, the hypothesis assigns a number to each \(y \in Y\) which can be used to compute the relative likelihood of each potential output. We can even run this analysis for an \textit{improper probability distribution function}, for example one that assigns an unnormalized PDF score of 1 to each real number (\(Y=\Re\)) even though such a function cannot be normalizes as the integral is infinite.
 
 Once the hypothesis space has been defined, the task is either to \textit{select} a model or \textit{sample} a model. In the former case of selection, we want to select a single model as the result of our analysis and in the latter case of sampling, we want to pull a series of models according to their relative probabilities in order to take into account model uncertainty.
 
