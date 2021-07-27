@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.7.14)  16 JUL 2021 20:04
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.7.14)  27 JUL 2021 01:30
 entering extended mode
 **./bias-correction-paper.tex
 (bias-correction-paper.tex
@@ -709,43 +709,52 @@ Package: appendix 2020/02/08 v1.2c extra appendix facilities
 \c@@ppsavesec=\count319
 \c@@ppsaveapp=\count320
 )
+(C:\Users\maxsk\AppData\Local\Programs\MiKTeX\tex/latex/enumitem\enumitem.sty
+Package: enumitem 2019/06/20 v3.9 Customized lists
+\labelindent=\skip58
+\enit@outerparindent=\dimen287
+\enit@toks=\toks43
+\enit@inbox=\box112
+\enit@count@id=\count321
+\enitdp@description=\count322
+)
 (C:\Users\maxsk\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-pdf
 tex.def
 File: l3backend-pdftex.def 2021-05-07 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count321
-\l__pdf_internal_box=\box112
+\l__color_backend_stack_int=\count323
+\l__pdf_internal_box=\box113
 ) (bias-correction-paper.aux)
 \openout1 = `bias-correction-paper.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 14.
-LaTeX Font Info:    ... okay on input line 14.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 14.
-LaTeX Font Info:    ... okay on input line 14.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 14.
-LaTeX Font Info:    ... okay on input line 14.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 14.
-LaTeX Font Info:    ... okay on input line 14.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 14.
-LaTeX Font Info:    ... okay on input line 14.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 14.
-LaTeX Font Info:    ... okay on input line 14.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 14.
-LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
 
 (C:\Users\maxsk\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mk
 ii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count322
-\scratchdimen=\dimen287
-\scratchbox=\box113
-\nofMPsegments=\count323
-\nofMParguments=\count324
-\everyMPshowfont=\toks43
-\MPscratchCnt=\count325
-\MPscratchDim=\dimen288
-\MPnumerator=\count326
-\makeMPintoPDFobject=\count327
-\everyMPtoPDFconversion=\toks44
+\scratchcounter=\count324
+\scratchdimen=\dimen288
+\scratchbox=\box114
+\nofMPsegments=\count325
+\nofMParguments=\count326
+\everyMPshowfont=\toks44
+\MPscratchCnt=\count327
+\MPscratchDim=\dimen289
+\MPnumerator=\count328
+\makeMPintoPDFobject=\count329
+\everyMPtoPDFconversion=\toks45
 )
 (C:\Users\maxsk\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf-b
 ase.sty
@@ -793,7 +802,7 @@ File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 Package pgfplots Warning: running in backwards compatibility mode (unsuitable t
 ick labels; missing features). Consider writing \pgfplotsset{compat=1.18} into 
 your preamble.
- on input line 14.
+ on input line 15.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -830,70 +839,81 @@ your preamble.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-LaTeX Font Info:    Trying to load font information for U+msa on input line 40.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 41.
 
 (C:\Users\maxsk\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 40.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 41.
 
 
 (C:\Users\maxsk\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Underfull \hbox (badness 10000) in paragraph at lines 60--63
+[1
+
+{C:/Users/maxsk/AppData/Local/MiKTeX/pdftex/config/pdftex.map}]
+Underfull \hbox (badness 10000) in paragraph at lines 98--102
 
  []
 
-[1
 
-{C:/Users/maxsk/AppData/Local/MiKTeX/pdftex/config/pdftex.map}] [2] [3]
-[4] [5] [6] [7] [8] [9]
-Overfull \hbox (85.69069pt too wide) in paragraph at lines 327--328
+Underfull \vbox (badness 6725) has occurred while \output is active []
+
+ [2]
+[3] [4]
+Underfull \vbox (badness 6380) has occurred while \output is active []
+
+ [5]
+[6] [7] [8] [9] [10]
+Overfull \hbox (85.69069pt too wide) in paragraph at lines 360--361
 []\OT1/cmr/m/n/10 The pa-per Ely found that has the equa-tion in it for Bi-nary
  Lo-gis-tic: < https://onlinelibrary.wiley.com/doi/full/10.1111/coin.12123
  []
 
 
-Underfull \hbox (badness 3758) in paragraph at lines 345--346
+Underfull \hbox (badness 3758) in paragraph at lines 376--377
 []\OT1/cmr/m/n/10 Heinrich, G. (2005). Pa-ram-e-ter es-ti-ma-tion for text anal
 -y-sis. Web: http://www. ar-by-lon.
  []
 
-[10] [11] (bias-correction-paper.aux) ) 
+[11] [12] (bias-correction-paper.aux)
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+ ) 
 Here is how much of TeX's memory you used:
- 24603 strings out of 478864
- 625935 string characters out of 2848660
- 1040560 words of memory out of 3000000
- 42098 multiletter control sequences out of 15000+600000
+ 24928 strings out of 478864
+ 631466 string characters out of 2848660
+ 1039559 words of memory out of 3000000
+ 42419 multiletter control sequences out of 15000+600000
  413471 words of font info for 65 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  99i,6n,103p,749b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
-<C:/Users/maxsk/AppData/Local/Programs/M
-iKTeX/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Users/maxsk/AppData/Local/P
-rograms/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Users/maxsk/AppDat
-a/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx5.pfb><C:/Users/maxs
-k/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx7.pfb><C:/Us
-ers/maxsk/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx9.pf
-b><C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
-cmex10.pfb><C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
-fonts/cm/cmmi10.pfb><C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts/type1/p
-ublic/amsfonts/cm/cmmi5.pfb><C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts
-/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/maxsk/AppData/Local/Programs/MiKT
-eX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/maxsk/AppData/Local/Progr
-ams/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/maxsk/AppData/Loc
-al/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Users/maxsk/App
-Data/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr5.pfb><C:/Users/ma
-xsk/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/U
-sers/maxsk/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr9.pf
-b><C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
-cmsy10.pfb><C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
-fonts/cm/cmsy5.pfb><C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts/type1/pu
-blic/amsfonts/cm/cmsy7.pfb><C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts/
-type1/public/amsfonts/cm/cmti10.pfb>
-Output written on bias-correction-paper.pdf (11 pages, 261142 bytes).
+<C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
+cmbx10.pfb><C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
+fonts/cm/cmbx12.pfb><C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts/type1/p
+ublic/amsfonts/cm/cmbx5.pfb><C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts
+/type1/public/amsfonts/cm/cmbx7.pfb><C:/Users/maxsk/AppData/Local/Programs/MiKT
+eX/fonts/type1/public/amsfonts/cm/cmbx9.pfb><C:/Users/maxsk/AppData/Local/Progr
+ams/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/maxsk/AppData/Lo
+cal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/maxsk/A
+ppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi5.pfb><C:/Users
+/maxsk/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><
+C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr
+10.pfb><C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfont
+s/cm/cmr12.pfb><C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts/type1/public
+/amsfonts/cm/cmr17.pfb><C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts/type
+1/public/amsfonts/cm/cmr5.pfb><C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fon
+ts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/maxsk/AppData/Local/Programs/MiK
+TeX/fonts/type1/public/amsfonts/cm/cmr9.pfb><C:/Users/maxsk/AppData/Local/Progr
+ams/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/maxsk/AppData/Lo
+cal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy5.pfb><C:/Users/maxsk/Ap
+pData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/
+maxsk/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmti10.pfb>
+Output written on bias-correction-paper.pdf (12 pages, 265164 bytes).
 PDF statistics:
- 136 PDF objects out of 1000 (max. 8388607)
+ 139 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  13 words of extra memory for PDF output out of 10000 (max. 10000000)
 

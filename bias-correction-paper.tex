@@ -9,6 +9,7 @@
 \usepackage{fullpage}
 \usepackage{pdflscape}
 \usepackage[toc,page]{appendix}
+\usepackage[shortlabels]{enumitem}
 
 
 \begin{document}
@@ -44,19 +45,57 @@ Another Author?
 abstract
 \end{abstract}
 
-\section{Introduction}
+\section{Background}
 
-Introduction
+While so-called big data has unlocked incredible new applications of machine learning, all of this data processing comes at a heavy cost in terms of time, money, and energy. Many models will perform just as well had they been trained on a fraction of the data available, or at least the performance difference is not enough to justify the cost of including all data. Therefore, sampling or removing data from learning systems is a legitimate design decision.
 
-\subsection{Motivation}
+The obvious way to slim down data is through random sampling. For each training example, a random number could be generated uniformly between 0 and 1, and then if the random number is less than a certain value, that datapoint remains in the sampled set.
 
-motivation \\
-a simple example \\
-mention the Foursquare Attribution system \\
-mention Maalouf paper
+This simple process ignores the fact that sometimes - particularly when there is an imbalanced data set - certain training examples are worth more than others.
+
+\subsection{Example: Image Recognition}
+
+For example, suppose that the goal was to train an image recognition algorithm to recognize the image of a lion. Setting aside the need for test and validation sets for a moment, suppose that the training data contains 2000 images of lions, and about 400,000 images that are *NOT* lions.
+
+\begin{enumerate}[label=\Alph*]
+\item train on all of the data
+\item  randomly sample 25 percent of the data
+\item  randomly sample a quarter of ONLY the non-lion images, so that all 2000 of the positive examples could be used.
+\end{enumerate}
+
+
+Can we create models that are just as good, or almost as good if we reduce the amount of data points by an order of magnitude?
+Not all data is equally important, so we want to sample from the original dataset
+Simple Example of not all data equally important (Lion detector)
+
+Model B is probably wrong.
+
+If we use model C (Illustrate these models) without taking into account the sampling, a model will hopefully be able to detect the core visual features of a Lion and therefore won’t be too biased.
+
+\subsection{Example: Probabilistic Event Detection}
+
+The need to account for uneven sampling becomes far more critical in the case of a probabilistic model where we expect the results to be highly uncertain and are relying on accurate probabilities of the potential outputs.
+
+One example of this is an iteration of Foursquare’s attribution model, which has a pending patent (source)... As part of a product that measures the ability of an online advertisement to drive consumers to the stores of a retail chain (let’s say Starbucks), the Foursquare data pipeline first had to build a model that calculates the probability that any given individual would visit starbucks on any given day.
+
+Foursquare has access to a visit database with many examples of visits to Starbucks, but the examples of people who “did not visit” starbucks on any given day is an order of magnitude higher! Therefore, it makes sense to downsample those non-visits…
+
+And because a precise probability is necessary for best-in-class ad measurement, that sampling much be accounted for appropriately.
+
+\subsection{Goals}
+
+Formulate a (generalized) supervised machine learning problem with a sampling function that allows the user to determine which pieces of data are most important.
+This also works if the original dataset is unavailable and the sampling function is still known.
+Find a formula for a probability distribution over models (or a loss function) that works with the information in the sampler to best model the original, raw, dataset
+Apply this to logistic regression (because it’s so common)
+
+
+
+
 
 \subsection{Previous Work}
 
+Final Example: Maalouf paper
 previous work \\
 mention most bibliography items here \\
 Yan Lecun' Energy Paper \\
@@ -268,15 +307,9 @@ The derivative on a single weight \(\mathbf{w}_f\) can be computed to the follow
 
 \[\frac{\partial}{\partial \mathbf{w}_f }L(h)= \sum_{n \in  N} x_{n,f}\left(\mathbf{P}(y_n=1|x_n,h,\mathbf{s}) -y_n  \right )+ \lambda \cdot w_f \]
 
-\section{Conclusions}
-
-Not sure there are any other than you can use this?
-
-\subsection{Future Work}
+\section{Future Work}
 
 Concept of the marginal Value of a Data Point
-
-Needed?
 
 \begin{appendices}
 
@@ -326,8 +359,6 @@ Yan Lecun’s Energy Paper?
 
 The paper Ely found that has the equation in it for Binary Logistic: < https://onlinelibrary.wiley.com/doi/full/10.1111/coin.12123 >. This has other citations that may be worthwhile for us to read, especially if they involve anything about the history of this modified logistic regression algorithm.
 
-It could also be interesting to extend this to multinomial regression for multi-category prediction, in a case where each category has its own downsampling ratio.
-
 Reference the most recently Foursquare patent. Find out when it is available.
 
 The following references come from my 2014 paper on MLE for Dirichlet Prior. They should be changed to what we want for this paper
@@ -360,9 +391,7 @@ The following references come from my 2014 paper on MLE for Dirichlet Prior. The
 
 \bibitem{wallach}Wallach, H. M. (2008). Structured topic models for language. Unpublished doctoral dissertation, Univ. of Cambridge.
 
-\bibitem{wicker}Wicker, N., Muller, J., Kalathur, R. K. R., \& Poch, O. (2008). A maximum likelihood approximation method for Dirichlet's parameter estimation. Computational Statistics \& Data Analysis, 52(3), 1315-1322.
-
-\bibitem{woodbury}Woodbury, M. A. (1950). Inverting modified matrices. Memorandum report, 42, 106.
+\bibitem{visitprediction}Sklar, M., Stewart R., Li, R., Bakula, A., \& Spears, E. (2020) Visit Prediction. US Patent App. 16/405,481, 2020
 
 \end{thebibliography}
 \end{document}
