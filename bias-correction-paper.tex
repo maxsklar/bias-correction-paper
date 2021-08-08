@@ -16,118 +16,102 @@
 \parindent=0in
 \parskip=12pt
 
-%\twocolumn[
-%
-%\aistatstitle{}
-%
-%\aistatsauthor{ Max Sklar }
-%
-%\aistatsaddress{ Foursquare Labs } 
-%
-%]
-
 \title{
-  Bias Sampling Correction for Supervised Learning \\
+  Sampling Correction for Supervised Machine Learning \\
   \large{
     A  Probabilistic, Bayesian Approach
   }
 }
 
-\author{Max Sklar\\
-\and
-Another Author?
-}
+\author{Max Sklar}
 
 \maketitle
 \thispagestyle{empty}
 
 \begin{abstract}
-abstract
+ABSTRACT - THIS IS AN UNFINISHED DRAFT - DO  NOT PUBLISH
 \end{abstract}
 
-\section{Background}
+\section{Introduction}
 
-While so-called big data has unlocked incredible new applications of machine learning, all of this data processing comes at a heavy cost in terms of time, money, and energy. Many models will perform just as well had they been trained on a fraction of the data available, or at least the performance difference is not enough to justify the cost of including all data. Therefore, sampling or removing data from learning systems is a legitimate design decision.
+The goal of \textit{supervised machine learning} is to develop, execute, and deploy algorithms which learn to compute functions through example rather than being given instructions to compute these functions directly. This type of machine learning algorithm learns to approximate this function \(f: X \to Y\) given a dataset consisting of \(instances\) of input-output pairs \((x, y) \in X \times Y\). This set of examples, the \textit{training set}, is what allows the machine to learn the \textit{concept} of \(f\).
 
-The obvious way to slim down data is through random sampling. For each training example, a random number could be generated uniformly between 0 and 1, and then if the random number is less than a certain value, that datapoint remains in the sampled set.
+The composition of the training set is crucial, and it's expected that the model produced will be evaluated and ultimately deployed on data that "looks" like the training set, as if these \(instances\) were all pulled from the same source producing the same distribution. Sometimes models can perform well on datasets with somewhat different compositions than their training set, and in practice we do see this relied upon from time to time. However, it's an assumption that is far from certain to hold.
 
-This simple process ignores the fact that sometimes - particularly when there is an imbalanced data set - certain training examples are worth more than others.
+There are many practical examples of cases where a full underlying dataset, whether by design or circumstance, is not available, and only an unevenly sampled subset is. \textbf{Fortunately, when the sampling function is known, there is a method to learn the concept \(f\) from the remaining data, and to use all the evidence from that data as best as possible to design a model to fit the \(original\) dataset.} 
+
+The mathematical formula becomes apparent when analyzing it through the \textit{Bayesian framework} for supervised machine learning, reviewed in section \ref{framework}. Here, we start with a probability distribution over large set of possible models, and each model gives not a direct output to any input \(x \in X\), but a probability distribution over possible outputs \(y \in Y\). We are then able to use the dataset to compute a \textit{posterior distribution} over the potential models, allowing us to discriminate models by their projected performance.
+
+The posterior distribution in the case of an unevenly sampled dataset is found mathematically in sections \ref{section:problem} and \ref{section:solution}. The tractability of the final step to select or sample a model depends on the specific problem and approach to dealing with the posterior distribution. The formulas may be more complicated by the inclusion of a sampling function but in most cases tractability of searching the solution space is not compomised. In section \ref{section:logistic} we apply this formula to binary logistic regression as an particularly useful example.
+
+\section{Motivation}
+
+While big data has unlocked incredible new applications of machine learning, the accompanied processing comes at a heavy cost in terms of time, money, and energy. Many models will perform just as well had they been trained on a fraction of the data available, or at least the performance difference is not enough to justify the cost of including all data. Therefore, sampling or removing data from the training set is a legitimate design decision.
+
+One way to slim down data is through uniform random sampling, where each instance in the original dataset has an equal probability of being in the sampled set. This process ignores the fact that certain training examples are worth more than others, particularly when there is a classification imbalance.
 
 \subsection{Example: Image Recognition}
 
-For example, suppose that the goal was to train an image recognition algorithm to recognize the image of a lion. Setting aside the need for test and validation sets for a moment, suppose that the training data contains 2000 images of lions, and about 400,000 images that are *NOT* lions.
+Suppose that the goal was to train an image recognition algorithm to recognize the image of a lion. Suppose that the training data contains 2000 images of lions, and about 400,000 images that are \textbf{not} lions. The following 3 schemes for sampling the data are proposed:
 
 \begin{enumerate}[label=\Alph*]
-\item train on all of the data
-\item  randomly sample 25 percent of the data
-\item  randomly sample a quarter of ONLY the non-lion images, so that all 2000 of the positive examples could be used.
+\item Train on all of the data (2000 Lions, 400000 Non-Lions)
+\item Randomly sample 25 percent of the data (500 Lions, 100000 Non-Lions)
+\item  randomly sample a quarter of ONLY the non-lion images (2000 Lions, 100000 Non-Lions)
 \end{enumerate}
 
+In order to make a decision, one would now ask about the likely outcome or tradoffs between these 3 options.
 
-Can we create models that are just as good, or almost as good if we reduce the amount of data points by an order of magnitude?
-Not all data is equally important, so we want to sample from the original dataset
-Simple Example of not all data equally important (Lion detector)
+Option A uses all of the data, and therefore will take the most resources to train. In theory, the model produced by option A will be better than (or at least as good as) any of the other models. This is because in the Bayesian framework we search for a model that best explains the data, and additional data can only refine our search. In practice this might not be the case because the algorithm for searching the model space is imperfect. For example, if a \textit{mini-batch} system is used to find the best model, it might not converge as quickly or as perfectly with an imbalanced dataset.
 
-Model B is probably wrong.
+Option B has all the imbalance of A, but has less data to consider. The model space can be searched faster under B, but the results are likely to be far worse. From an intuitive standpoint, an algorithms designed to learn what a lion is relies on lion photos, and for that we don't have very many. Because of the imbalance, each lion photo is much more valuable to our model's success than a non-lion photo. Common sense would tell us that a reduction in lion photos from 2000 to 500 is likely to make a big impact.
 
-If we use model C (Illustrate these models) without taking into account the sampling, a model will hopefully be able to detect the core visual features of a Lion and therefore won’t be too biased.
+Under option C, the data size is almost as small as B, but now all 2000 lion photos remain. The likely outcome is that option C performs far better than option B. There's even a chance that it performs better than option A if the data imbalance hinders the algorithm, but it'll be just as easy to run as B.
+
+One concern is that if option C doesn't correct for this bias and take the sampling into account, it will use learn that Lions are more common than they really are in the underlying dataset, and therefore will tend to overpredict lions. In this case, it is possible that the underlying image recognition algorithm will detect the core visual features of a lion and will not have that issue even without correction, but such a correction is desirable.
 
 \subsection{Example: Probabilistic Event Detection}
 
-The need to account for uneven sampling becomes far more critical in the case of a probabilistic model where we expect the results to be highly uncertain and are relying on accurate probabilities of the potential outputs.
+The need to account for uneven sampling becomes far more critical in the case of a probabilistic model where the results are expected to be highly uncertain and rely on accurate probabilities of the potential outputs.
 
-One example of this is an iteration of Foursquare’s attribution model, which has a pending patent (source)... As part of a product that measures the ability of an online advertisement to drive consumers to the stores of a retail chain (let’s say Starbucks), the Foursquare data pipeline first had to build a model that calculates the probability that any given individual would visit starbucks on any given day.
+One example of this is an iteration of Foursquare’s attribution model, which has a pending patent\cite{visitprediction}... As part of a product that measures the ability of an online advertisement to drive consumers to the stores of a given retail chain, the Foursquare data pipeline first had to build a model that calculates the probability that any given individual would visit that chain on any given day.
 
-Foursquare has access to a visit database with many examples of visits to Starbucks, but the examples of people who “did not visit” starbucks on any given day is an order of magnitude higher! Therefore, it makes sense to downsample those non-visits…
-
-And because a precise probability is necessary for best-in-class ad measurement, that sampling much be accounted for appropriately.
-
-\subsection{Goals}
-
-Formulate a (generalized) supervised machine learning problem with a sampling function that allows the user to determine which pieces of data are most important.
-This also works if the original dataset is unavailable and the sampling function is still known.
-Find a formula for a probability distribution over models (or a loss function) that works with the information in the sampler to best model the original, raw, dataset
-Apply this to logistic regression (because it’s so common)
-
-
-
-
+Foursquare has access to a visit database with many examples of visits, but the examples of people who “did not visit” on any given day is higher by several orders of magnitude. Therefore, it makes sense to downsample those non-visits. Because a precise probability is necessary for a high-end ad measurement product, that sampling must be accounted for appropriately and precisely.
 
 \subsection{Previous Work}
 
 Final Example: Maalouf paper
 previous work \\
 mention most bibliography items here \\
-Yan Lecun' Energy Paper \\
+Yan Lecun' Energy Paper
 
+\section{Bayesian Supervised Machine Learning Framework} \label{framework}
 
-\section{Definitions and Conventions}
-
-The following is a typical setup for a probabilistic supervised learning problem. The terminology and variables will be reused in subsequent sections of this paper.
+The following is a typical setup for probabilistic supervised meachine learning using a Bayesian framework. The terminology and variable names will be reused in subsequent sections of this paper.
 
 Let \(X\) represent the input space. \\
 Let \(Y\) represent the output space.
 
-The dataset \(D\) consists of \(N\) examples of pairs \((x, y) \in (X \times Y) \). The goal is to predict an output \(y \in Y\) from a corresponding input \(x \in X\). This dataset may be generated by an oracle from which we can ask for an arbitrary number of examples, or it might be a small and limited collection. In any case, our learning will be based off of just these \(N\) examples.
+The goal is to predict an output \(y \in Y\) from a corresponding input \(x \in X\).
+
+The dataset used for training \(D\) consists of \(N\) examples of pairs \((x, y) \in (X \times Y) \).  This dataset may be generated by an oracle from which we can ask for an arbitrary number of examples, or it might be a small and limited collection. In any case, our learning will be based off of just these \(N\) examples.
 
 For all \(n \in (0, 1, 2,\ldots,N-1)\), label the specific instance \((x_n, y_n)\).
 
-[ Explain the terminology model, and why h is used as hypothesis ]
+The strategy for attacking this problem is to create a \textit{hypothesis space} \(H\) whose members \(h \in H\) which each encode a solution to the prediction problem. We assume that one of these predictors is the correct one, but they are all possible\footnote{In practice we must consider that this space may not contain our solution, but this temporary assumption makes the bayesian process possible.} Therefore, each \(h \in H\) can be considered a \textit{hypothesis} for a solution to our problem. They are also called \textit{predictors} or \textit{models}. We will use the term predictor to empasize it's ultimate purpose while using the letter \(h\).
 
-[ Explain terminology probability measure vs probability distribution ]
-
-Consider a hypothesis space \(H\) which contains all the predictors, or \textit(models), under consideration. In some setups, each hypothesis \(h \in H\) is a direct function from \(X\) to \(Y\), which means that these predictors are \textit{directly predicting} \(y \in Y\). Here we assume that each hypothesis is a function of \(x \in X\) and returns a \textit{probability measure} over \(Y\). This is what we mean by \textit{probabilistically predicting} \(y \in Y\).
+In some setups, each hypothesis \(h \in H\) is a direct function from \(X\) to \(Y\), which means that these predictors are \textit{directly predicting} \(y \in Y\). Here we assume that each hypothesis is a function of \(x \in X\) and returns a \textit{probability measure} over \(Y\). This is what we mean by \textit{probabilistically predicting} \(y \in Y\).
 
 While the equations in this paper generalize to all probability measures over the output space \(Y\), we keep several cases in mind.
 \begin{enumerate}
-	\item \(Y\) is finite. This is a problem of \textit{classification}. This probability measure is the most familiar as it is simply a finite sum that adds to one.
-	\item \(Y\) is discrete but infinite. Here the probabily measure will still assign a number to each potential output, where not the infinite sum adds to one.
-	\item \(Y\) is infinite and continuous. Now each hypothesis corresponds to a \textit{probability distribution function} (PDF) over \(Y\), which integrates to one.
+	\item \(Y\) is finite. This is a problem of \textit{classification}. Each predictor takes an input \(x \in X\) and return a probability for each \(y \in Y\) that sums to one.
+	\item \(Y\) is discrete but infinite. The predictor still assigns a number to each potential output, but now the infinite sum adds to one.
+	\item \(Y\) is continuous. The predictor returns a \textit{probability distribution function} (PDF) over \(Y\), which integrates to one.
 \end{enumerate}
 
-In all of these cases, the model assigns a number to each \(y \in Y\) which can be used to compute the relative probability of each potential output given an input \(x\). In the case of discrete \(Y\) this relative probability of \(y_1, y_2 \in Y\) is just the ratio of their individual probabilities, and for continuous \(Y\) it is the ratio of their values in the probability distribution function. Our generalization will extend to these cases, which is very broad. It even includes the possibility of an \textit{improper probability distribution function}, for example one that assigns an unnormalized PDF score of 1 to each real number \(Y=\Re\) even though such a function cannot be normalized.
+In all of these cases, the model assigns a number to each \(y \in Y\) which can be used to compute the relative probability of each potential output given an input \(x\). In the case of discrete \(Y\) this relative probability of \(y_1, y_2 \in Y\) is just the ratio of their individual probabilities, and for continuous \(Y\) it is the ratio of their values in the probability distribution function. 
 
-Given this setup, we can say that each model \(h\) is uniquely identified with an (unnormalized) \textit{relative probability function} \(f_h: X \times Y \rightarrow \Re^+\).
+Given this setup, we can say that each model \(h\) is uniquely identified with an (unnormalized) \textit{relative probability function} \(f_h: X \times Y \rightarrow \Re^+\). Our generalization includes the possibility of an \textit{improper probability distribution function}, for example one that assigns an unnormalized PDF score of 1 to each real number \(Y=\Re\) even though such a PDF cannot be normalized.
 
 In cases where this probability function can be normalized, we use a normalized probability function \(\hat{f}_h: X \times Y \rightarrow \Re^+\). When \(Y\) is discrete, we can say
 
@@ -136,96 +120,79 @@ In cases where this probability function can be normalized, we use a normalized 
 \hat{f}_h(x, y)\left(\sum_{y' \in Y} f_h(x,y')\right)=f_h(x, y).
 \end{equation}
 
-Once the hypothesis space has been defined, the task is either to \textit{select} a model or \textit{sample} a model that best explains the data. In the case of selection, the analysis provides a a single model whereas in sampling, a series of models are randomly generated according to their relative strength in explaining the data.
+Once \(H\) has been defined, the task is either to \textit{select} a model or \textit{sample} a predictor that best explains the data. In the case of selection, the analysis provides a a single predictor whereas in sampling, a series of predictors are randomly generated according to their relative strength in explaining the data.
 
-In the simplest case where the hypothesis space \(H\) is finite and small, we will be able to calculate the probability of each \(h \in H\) and either select the model with the highest probability, or sample from it using a random number generator. In general, the hypothesis space \(H\) could be very complex and a variety of methods for selection and sampling have been developed. [SOURCE]
+We again rely on the concept of \textit{relative probability}, this time between two potential models \(h_1, h_2 \in H\) and their predictive power. In general, the hypothesis space \(H\) is very complex and a variety of methods for selection and sampling have been developed. [SOURCE] Source: MLE Paper from Max, NUTS MCMC Paper.
 
-In all of these cases, we again rely on the concept of \textit{relative probability}, this time between two potential models \(h_1, h_2 \in H\) and their predictive power. Therefore, \(H\) can also be a discrete or continuous probability measure, just like the output space \(Y\)
+The final component to a Bayesian analysis of the problem is the \textit{prior distribution} over \(H\) which is a probability measure representing the current belief over which predictor \(h \in H\) is correct. Typically, this will involve defining an \textit{uninformative prior} which encodes absense of knowledge of the problem. It is also common to incorporate \textit{Occam's Razor} which penalizes more complex predictors, or to use a prior that will be mathematically convenient. We here use \(\mathbf{P}(h)\) as the \textit{prior probability} of predictor \(h \in H\).
 
-[ Talk about a prior here ]
-
-Bayes rule in full for discrete \(H\) to compute the probability of individual model \(h_i\) is given as follows, where \(\mathbf{P}(h)\) is the \textit{prior probability} of model \(h\) and \(\mathbf{P}(D|h)\) is the probability of seeing the outputs in dataset \(D\) under the model \(h\)
+Bayes rule for discrete \(H\) finds the probability of individual predictor \(h_i\). \(\mathbf{P}(D|h)\) is the probability of seeing the outputs in dataset \(D\) under the model \(h\)
 
 \[\mathbf{P}(h_i|D)=\frac{\mathbf{P}(D|h_1)\mathbf{P}(h_1)}{\sum_{h \in H}\mathbf{P}(D|h)}\]
 
-Bayes rule for relative probability is can be defined as follows where our probability functions such as \(\mathbf{P}(h|D)\) assign unnormalized values:
+This is rewritten for relative probability to derive unnormalized values for \(\mathbf{P}(h|D)\).
 
 \begin{equation}
 \label{eq:bayes}
 \mathbf{P}(h|D)\propto\mathbf{P}(D|h)\mathbf{P}(h)
 \end{equation}
 
-The relative probability of the dataset under model \(h\), denoted by \(\mathbf{P}(D|h)\), is the product of the relative probability function of each instance label \(y_n\) being produced.
+The relative probability of the dataset under model \(h\), denoted by \(\mathbf{P}(D|h)\), is the product of the relative probability function of each instance. This allows us to rewrite the formula for the relative probability of a predictor as
 
-\[\mathbf{P}(D|h)\propto \prod_{n \in N} f_h(x_n,y_n)\]
+\[\mathbf{P}(h|D)\propto\prod_{n \in N} f_h(x_n,y_n)\mathbf{P}(h).\]
 
-Finally, the formula for relative probability of a model is given by
+It is often more convenient to work with a \textit{negative log-likilihood loss} function by applying \(-\ln(\ldots)\) to the right hand side of this equation and getting
 
-\[\mathbf{P}(h|D)\propto\prod_{n \in N} f_h(x_n,y_n)\mathbf{P}(h)\].
+\[L(h)=-\sum_{n \in N} \ln(f_h(x_n,y_n))-\ln(\mathbf{P}(h)).\]
 
-In most cases, it is more convenient to turn this into a \textit{negative log-likilihood loss} function by applying \(-\ln(\ldots)\) of the right hand side of this equation and getting:
+Assume each hypothesis comes with its own negative log-likelihood loss function \(l_h\) where \(f_h(x_n,y_n)\propto e^{-l_h(x_n,y_n)}\) and the prior \(\mathbf{P}(h)\) can be reduced to a regularization function \(\mathbf{r}(h)\) where \(\mathbf{P}(h)\propto e^{-\mathbf{r}(h)}\). The final form of the loss function is
 
-\[L(h)=-\sum_{n \in N} \ln(f_h(x_n,y_n))-\ln(\mathbf{P}(h))\]
+\[L(h)=\sum_{n \in N} l_h(x_n,y_n)+\mathbf{r}(h).\]
 
-We can simplify further by assuming each hypothesis to comes with its own negative log-likelihood loss function \(l_h\) where \(f_h(x_n,y_n)\propto e^{-l_h(x_n,y_n)}\) and for the prior \(\mathbf{P}(h)\) to be reduced to a regularization function \(\mathbf{r}(h)\) where \(\mathbf{P}(h)\propto e^{-\mathbf{r}(h)}\). With that in place, the final form of the loss function is as follows:
-
-\[L(h)=\sum_{n \in N} l_h(x_n,y_n)+\mathbf{r}(h)\]
-
-This form is often more convenient when it comes to model selection or sampling, through techniques such as hill climbing, gradient descent, or Markov Chain Monte Carlo. [Include some citations]
+This form is more convenient for model selection or sampling through techniques such as hill climbing, gradient descent, or Markov Chain Monte Carlo. [Include some citations]
 [ Should I introduce a catch-all term for "selection or sampling"? ]
 
 \section{The Sampling Problem}
+\label{section:problem}
 
-The previous section sets up a loss function for a standard probabilistic supervised learning problem.
+In the previous setup, \(D\) is a raw, unsampled dataset. Now consider cases where \(D\) has been derived by downsampling a larger dataset \(D^+\). Formally, we say that \(D\) was generated from \(D^+\) with a sampling function \(\mathbf{s}: X \times Y \rightarrow \left [ 0,1\right ]\). For each element \((x,y)\in D^+\), the sampling function \(\mathbf{s}(x,y)\) returns the probability that this example will be in \(D\).
 
-In this setup, it is assumed that \(D\) is either a unsampled dataset or if it has been sampled down it was done so randomly.
+Given access to a way to computer \(\mathbf{s}(x,y)\) and \(D^+\), one could sample and generate a smaller dataset. This is how we assume \(D\) was created. Now from just the dataset \(D\) and knowledge of \(\mathbf{s}\) we calculate the posterior probability and loss function in order to correctly apply Bayesian inference.
 
-In an extreme example, suppose that the output set \(Y\) consists of 3 classifications \(\{yes, no, maybe\}\) and whenever the result of one of the classes, say \(no\), appears in the dataset, the results were thrown away. The model would learn that \(\{yes, maybe\}\) were the possible responses, and would never put any significant amount of probability towards the \(no\) option!
-
-\textbf{The key point of this paper} is that when the sampling function is known, a probability distribution and loss function can still be computed for the remaining data. The sampling will affect what that final loss function knows about the data, but the results will represent the best-guess from the data available.
-
-Take the \(\{yes, no, maybe\}\) output space from above as an example where all of the \(no\) examples are sampled out. If the methods in this paper are deployed, the models in \(H\) that are ultimately selected will be the ones that correctly distinguish between the \(yes\) and \(maybe\) responses. Their assignments of \(no\) will vary widely - as only the information in the prior will be used to discriminate between them.
-
-The formal statement of the problem is as follows:
-
-Suppose that the dataset \(D\) was generated from an even larger dataset \(D^+\)of unknown size with a sampling function \(\mathbf{s}: X \times Y \rightarrow \left [ 0,1\right ]\). For each element \((x,y)\in D^+\), the sampling function \(\mathbf{s}(x,y)\) is calculated and returns the probability that this example will be in \(D\). Now from just the dataset \(D\) and knowledge of \(\mathbf{s}\) we calculate the posterior probability and loss function in order to correctly apply Bayesian inference.
+\textbf{The key point of this paper} is that when the sampling function is known, a probability distribution and loss function can still be computed from the remaining data. The sampling affects what that final loss function knows about the data, but the results will represent the best-guess from the data available.
 
 \section{The General Solution}
+\label{section:solution}
 
-We start with the unnormalized Bayes rule in equation~\eqref{eq:bayes}, but now considering that the posterior distribution and likelihood both depend on the sampling function \(\mathbf{s}\).
+Start with the unnormalized Bayes rule in equation~\eqref{eq:bayes}, but now consider that the posterior distribution and likelihood both depend on the sampling function \(\mathbf{s}\).
 
 \[\mathbf{P}(h|D,\mathbf{s})\propto\mathbf{P}(D|h,\mathbf{s})\mathbf{P}(h)\]
 
-As before, we calculate the likelihood.
+As before, calculate the likelihood to
 
-\[\mathbf{P}(D|h)=\prod_{n \in N} \mathbf{P}(y_n|x_n,h,\mathbf{s})\]
+\[\mathbf{P}(D|h)=\prod_{n \in N} \mathbf{P}(y_n|x_n,h,\mathbf{s}).\]
 
-Note that the input \(x_n\), model \(h\) and sampler \(\mathbf{s}\) are all taken as given in the expression \(\mathbf{P}(y_n|x_n,h,\mathbf{s})\). The question is the probability of producing the label \(y_n\) under these circumstances.
-
-Also note that if there is no sampling, then \(\mathbf{s}(x,y)=1\) and \(\mathbf{P}(y_n|x_n,h,\mathbf{s}) = \mathbf{P}(y_n|x_n,h)=f_h(x_n,y_n)\) thus reducing to the original problem.
-
-Each model \(h \in H\) is a description of the process of how dataset \(D\) is generated. The following mental model is a useful tool to understanding how the sampling function \(s\) factors into the generation of \(d\) under any given \(h \in H\).
+Note that the expression \(\mathbf{P}(y_n|x_n,h,\mathbf{s})\) conditions on \(x_n\), model \(h\) and sampler \(\mathbf{s}\). The question is the probability of producing the label \(y_n\) under these circumstances. The following mental model is a useful tool in understanding how the sampling function \(s\) factors into the generation of these labels \(y_n\) under any predictor \(h \in H\).
 
 \begin{enumerate}
-	\item Consider a specific value of \(x_n\) as the given input.
-	\item Under a model \(h\), we have a probability distribution over \(Y\) which is encoded by the relative probability function \(f_h(x_n,y_n)\) or loss function \(l_h(x_n,y_n)\).
+	\item Consider as given specific input \(x_n\), a predictor \(h \in H\), and the sampling function \(\mathbf{s}\). The predictor \(h\) encodes a probability distribution over \(Y\) through the relative probability function \(f_h(x_n,y_n)\) or loss function \(l_h(x_n,y_n)\).
 	\item \label{l} Sample from that probability distribution, and make this a candidate for \(y_n\), called \(y_n^*\)
 	\item Compute the sampling rate \(\mathbf{s}(x_n,y_n^*)\) and use that rate to probabilistically determine whether or not \(y_n^*\) is accepted.
     \begin{enumerate}
-    	  \item If it is accepted, set \(y_n=y_n^*\), and we have successfully generated a label for \(x_n\)
+        \item If it is accepted, return \(y_n=y_n^*\).
         \item If it is not accepted, return to step \ref{l} to generated another candidate.
     \end{enumerate}
 \end{enumerate}
 
 The sampling function must eventually halt which means that it cannot be equal to 0 for every potential candidate of any given \(x_n\). This is a fair assumption because if it were false, \(x_n\) would never appear in the dataset \(D\).
 
-The generative description above can be used to produce a recursive equation for the conditional probability of a given output in the dataset under the sampling function and in a given model \(\mathbf{P}(y_n|x_n,h,\mathbf{s})\).
+We now use the generative description above to produce a recursive equation for \(\mathbf{P}(y_n|x_n,h,\mathbf{s})\).
 
-Once a given candidate \(y\) is selected, the probability of ultimately accepting \(y\) depends on whether the candidate is accepted by the sampler or not. If it is accepted, this probability is equal to 1 if \(y_n = y\) and 0 otherwise, given by the indicator function \(\left [y_n = y\right ]\). If it is not accepted, then we the probability reverts to the original value of \(\mathbf{P}(y_n|x_n,h,\mathbf{s})\). Therefore, the probabilty of landing on \(y_n\) given that the candidate is \(y\) comes to
+We want to find the probability of selecting \(y_n\) and the first candidate is \(y\). If \(y\) is accepted, this probability is equal to 1 if \(y_n = y\) and 0 otherwise, given by the indicator function \(\left [y_n = y\right ]\). If it is not accepted, then we the probability reverts to the original value of \(\mathbf{P}(y_n|x_n,h,\mathbf{s})\). Therefore, the probabilty of ultimately landing on \(y_n\) comes to
 
 \[\mathbf{s}(x_n,y)\left [y_n = y\right ] + (1-\mathbf{s}(x_n,y))P(y_n|x_n,h,\mathbf{s}).\]
 
-If we assume that \(Y\) is discrete, we can use the normalized probability function of model \(h\) given in equation~\eqref{eq:normalized_probability_model} to sum over all possible candidates \(y\) and setup the recursive equation
+Assume that \(Y\) is discrete, we can use the normalized probability function of model \(h\) given in equation~\eqref{eq:normalized_probability_model} to sum over all possible candidates \(y\) and setup the recursive equation
 
 \begin{equation}
 \label{eq:bias_corrected_setup}
@@ -239,7 +206,7 @@ With algebraic manipuation detailed in appendix \ref{appendix:solving}, we can s
 \mathbf{P}(y_n|x_n,h,\mathbf{s})=\frac{f_h(x_n,y_n)\mathbf{s}(s_n,y_n)}{\sum_{y \in Y}f_h(x_n,y)\mathbf{s}(x_n,y)}.
 \end{equation}
 
-For a continuous output space \(Y\), the following analogous equation can be derived in a similar way, using integrals rather than a sums.
+For a continuous output space \(Y\), the following analogous equation can be derived using integrals rather than a sums.
 
 \begin{equation}
 \label{eq:bias_corrected_prob_continuous}
@@ -250,46 +217,39 @@ The feasibility of computing the sum or integral term depends on the structure o
 
 \subsection{Formula for Negative Log-Likelihood}
 
-With equation~\eqref{eq:bias_corrected_prob}, we now have all the tools needed to assign relative probabilities to the hypothesis space \(H\). To get it in the form most helpful to form for machine learning algorithms, we derive a negative log likelihood loss function. Start with Bayes:
+Equation~\eqref{eq:bias_corrected_prob} provides all the tools needed to assign relative probabilities to predictors in \(H\). To get it in a more helpful form, we derive a negative log likelihood loss function starting with relative Bayes.
 
 \[\mathbf{P}(h|D,\mathbf{s})\propto\prod_{n \in N} \left[\mathbf{P}(y_n|x_n,h,\mathbf{s})\right]\mathbf{P}(h)\]
 
-Then, use equation~\eqref{eq:bias_corrected_prob} to get it in terms of \(f_h\):
+Then, use equation~\eqref{eq:bias_corrected_prob} to get this in terms of \(f_h\):
 
 \[\mathbf{P}(h|D,\mathbf{s})\propto\prod_{n \in N} \left[f_h(x_n,y_n)\mathbf{s}(s_n,y_n)\left [\sum_{y \in Y}f_h(x_n,y)\mathbf{s}(x_n,y) \right ]^{-1} \right]\mathbf{P}(h)\]
 
 Finally, derive a negative likelihood loss function on \(h\):
 
-\[L(h)= \sum_{n \in N} -\ln\left[f_h(x_n,y_n)\mathbf{s}(s_n,y_n)\left [\sum_{y \in Y}f_h(x_n,y)\mathbf{s}(x_n,y) \right ]^{-1} \right] +\mathbf{r}(h)\]
-
 \[L(h)= \sum_{n \in N} \left[l_h(x_n,y_n)-\ln\mathbf{s}(s_n,y_n)+\ln\sum_{y \in Y}f_h(x_n,y)\mathbf{s}(x_n,y) \right] +\mathbf{r}(h)\]
 
 \section{Solution for Binary Logistic Regression}
+\label{section:logistic}
 
-Binary logistic regression is a special case where the following is true:
-
-The output space is binary: \(Y = {0, 1}\).
-The input space is a list of \(|F|\) real valued features: \(X = \Re ^{|F|}\).
-
-The hypothesis space consists of the weights and intercept of a logistic regression. \(H=\Re \time \Re ^{|F|}\)  where  \((c, \mathbf{w}) \in H\) indicates that \(c \in \Re\) is the constance intercept and \(\mathbf{w} \in \Re ^{|F|}\) is an |F|-dimentional vector of weights corresponding to each input feature.
+A \textit{binary logistic regression} problem means that the learning problem in section \ref{introduction} with the following additional properties:
+\begin{enumerate}
+	\item It is a \textit{binary classification} in that \(Y = {0, 1}\).
+	\item The input space \(X\) is a list of real valued features. Let \(F\) denotes a finite set of features, \(X = \Re ^{|F|}\).
+	\item Each predictor \(h \in H\) is parameterized by \(h = (c, \mathbf{w})\) where \(c \in \Re\) is the intercept and \(\mathbf{w} \in \Re ^{|F|}\) is an \(|F|\)-dimentional vector of weights corresponding to each input feature.
+\end{enumerate}
 
 Each hypothesis \((c, \mathbf{w})=h \in H\) corresponds to the following probability distribution function:
 
-\[f_h(x_n, y_n)=f_{c,\mathbf{w}}(x_n, y_n)=\frac{e^{y_n \cdot (c+\mathbf{w} \cdot x_n)}}{1+e^{c+\mathbf{w} \cdot x_n}}\]
+\[f_{c,\mathbf{w}}(x_n, y_n)=\frac{e^{y_n \cdot (c+\mathbf{w} \cdot x_n)}}{1+e^{c+\mathbf{w} \cdot x_n}}\]
 
-Therefore, using  equation~\eqref{eq:bias_corrected_prob}:
+Using  equation~\eqref{eq:bias_corrected_prob} and simplifying we see
 
-\[\mathbf{P}(y_n|x_n,h,\mathbf{s})=\frac{f_h(x_n,y_n)\mathbf{s}(s_n,y_n)}{\sum_{y \in Y}f_h(x_n,y)\mathbf{s}(x_n,y)} \]
+\[\mathbf{P}(y_n|x_n,h,\mathbf{s})=\frac{f_h(x_n,y_n)\mathbf{s}(s_n,y_n)}{\sum_{y \in Y}f_h(x_n,y)\mathbf{s}(x_n,y)}=\frac{e^{y_n \cdot (c+\mathbf{w} \cdot x_n)}\mathbf{s}(s_n,y_n)}{\mathbf{s}(x_n,0)+e^{c+\mathbf{w} \cdot x_n}\mathbf{s}(x_n,1)} \]
 
-\[\mathbf{P}(y_n|x_n,h,\mathbf{s})=\frac{\frac{e^{y_n \cdot(c+\mathbf{w} \cdot x_n)}}{1+e^{c+\mathbf{w} \cdot x_n}}\mathbf{s}(s_n,y_n)}{\sum_{y \in Y}\frac{e^{y \cdot (c+\mathbf{w} \cdot x_n)}}{1+e^{c+\mathbf{w} \cdot x_n}}\mathbf{s}(x_n,y)} =\frac{e^{y_n \cdot (c+\mathbf{w} \cdot x_n)}\mathbf{s}(s_n,y_n)}{\sum_{y \in Y}e^{y \cdot (c+\mathbf{w} \cdot x_n)}\mathbf{s}(x_n,y)}\]
+Occasionally these problems are framed to focus on the probability that the \textit{target condition} is met, or \(y_n = 1\). Often, this target condition is the rare event that incentivized the use of adaptive sampling to begin with! We can solve for this probability as follows:
 
-\[\mathbf{P}(y_n|x_n,h,\mathbf{s})=\frac{e^{y_n \cdot (c+\mathbf{w} \cdot x_n)}\mathbf{s}(s_n,y_n)}{e^{0 \cdot (c+\mathbf{w} \cdot x_n)}\mathbf{s}(x_n,0)+e^{1 \cdot (c+\mathbf{w} \cdot x_n)}\mathbf{s}(x_n,1)}=\frac{e^{y_n \cdot (c+\mathbf{w} \cdot x_n)}\mathbf{s}(s_n,y_n)}{\mathbf{s}(x_n,0)+e^{c+\mathbf{w} \cdot x_n}\mathbf{s}(x_n,1)} \]
-
-Typically in these cases, we want to focus on the probability that \(y_n = 1\), or the probability that the target condition is met. This target condition is also usually the rare condition that incentivized the use of adaptive sampling to begin with.
-
-\[\mathbf{P}(y_n=1|x_n,h,\mathbf{s})=\frac{e^{c+\mathbf{w} \cdot x_n}\mathbf{s}(s_n,1)}{\mathbf{s}(x_n,0)+e^{c+\mathbf{w} \cdot x_n}\mathbf{s}(x_n,1)} \]
-
-\[\mathbf{P}(y_n=1|x_n,h,\mathbf{s})=\frac{e^{c+\mathbf{w} \cdot x_n}}{r_n+e^{c+\mathbf{w} \cdot x_n}} \]
+\[\mathbf{P}(y_n=1|x_n,h,\mathbf{s})=\frac{e^{c+\mathbf{w} \cdot x_n}\mathbf{s}(s_n,1)}{\mathbf{s}(x_n,0)+e^{c+\mathbf{w} \cdot x_n}\mathbf{s}(x_n,1)}=\frac{e^{c+\mathbf{w} \cdot x_n}}{r_n+e^{c+\mathbf{w} \cdot x_n}} \]
 
 Here, \(r_n = \mathbf{s}(s_n,0)(\mathbf{s}(s_n,1))^{-1}\) is the true-to-false sample ratio for each instance \(n\). This ratio is all that is needed to compute results for the binary logistic regression case. Note that for \(r_n=1\), we are left with the usual binary logistic regression formula.
 
@@ -297,7 +257,7 @@ For the prior, we can use a Gaussian distribution (aka L2, or ridge regression) 
 
 \[\mathbf{r}(c,\mathbf{w})=\frac{1}{2}\lambda(\mathbf{w} \cdot \mathbf{w})\]
 
-We can put it together to compute a negative log-likelihood loss function. Some constant factors were dropped in this case.
+Put this together and drop some constant factors to derive a negative log-likelihood loss function.
 
 \[L(h)=\sum_{n \in  N} \left (\ln\left (r_n+e^{c+\mathbf{w} \cdot x_n}\right ) -y_n \cdot (c+\mathbf{w} \cdot x_n) \right )+ \frac{1}{2}\lambda(\mathbf{w} \cdot \mathbf{w})\]
 
@@ -353,45 +313,21 @@ If we assume that there was no sampling, or the sampling was uniform where \(\ma
 
 \end{appendices}
 
-\section{Notes: Potential references}
-
-Yan Lecun’s Energy Paper?
-
-The paper Ely found that has the equation in it for Binary Logistic: < https://onlinelibrary.wiley.com/doi/full/10.1111/coin.12123 >. This has other citations that may be worthwhile for us to read, especially if they involve anything about the history of this modified logistic regression algorithm.
-
-Reference the most recently Foursquare patent. Find out when it is available.
-
-The following references come from my 2014 paper on MLE for Dirichlet Prior. They should be changed to what we want for this paper
-
 %\subsubsection*{References}
 
 \begin{thebibliography}{20}
 
-\bibitem{blei}Blei, D. M., Ng, A. Y., \& Jordan, M. I. (2003). Latent dirichlet allocation. the Journal of machine Learning research, 3, 993-1022.
-
-\bibitem{dishon}Dishon, M., \& Weiss, G. H. (1980). Small sample comparison of estimation methods for the beta distribution. Journal of Statistical Computation and Simulation, 11(1), 1-11.
-
-\bibitem{hariharan}Hariharan, H. S., \& Velu, R. P. (1993). On estimating dirichlet parameters—a comparison of initial values. Journal of statistical computation and simulation, 48(1-2), 47-58.
-
-\bibitem{heinrich}Heinrich, G. (2005). Parameter estimation for text analysis. Web: http://www. arbylon. net/publications/text-est. pdf.
-
-\bibitem{hijazi}Hijazi, R. H., \& Jernigan, R. W. (2009). Modelling compositional data using Dirichlet regression models. Journal of Applied Probability \& Statistics, 4, 77-91.
-
-\bibitem{minka}Minka, T. (2000). Estimating a Dirichlet distribution. Technical report, M.I.T., 2000.
-
-\bibitem{narayanan}Narayanan, A. (1991). Algorithm AS 266: maximum likelihood estimation of the parameters of the Dirichlet distribution. Journal of the Royal Statistical Society. Series C (Applied Statistics), 40(2), 365-374.
-
-\bibitem{ng}Ng, K. W., Tian, G. L., \& Tang, M. L. (2011). Dirichlet and Related Distributions: Theory, Methods and Applications (Vol. 888). John Wiley \& Sons.
-
 \bibitem{robert}Robert, C. (2007). The Bayesian choice: from decision-theoretic foundations to computational implementation. Springer.
 
-\bibitem{ronning}Ronning, G. (1989). Maximum likelihood estimation of Dirichlet distributions. Journal of statistical computation and simulation, 32(4), 215-221.
+\bibitem{pymc3}Salvatier, J., Wiecki, T. V., \& Fonnesbeck, C. (2016). Probabilistic programming in Python using PyMC3. PeerJ Computer Science, 2, e55.
 
-\bibitem{sklar}Sklar, M., Shaw, B., \& Hogue, A. (2012, September). Recommending interesting events in real-time with foursquare check-ins. In Proceedings of the sixth ACM conference on Recommender systems (pp. 311-312). ACM.
+\bibitem{pythonbayes}Martin, O. (2016). Bayesian analysis with python. Packt Publishing Ltd.
+
+\bibitem{gelman}Hoffman, M. D., \& Gelman, A. (2014). The No-U-Turn sampler: adaptively setting path lengths in Hamiltonian Monte Carlo. J. Mach. Learn. Res., 15(1), 1593-1623.
 
 \bibitem{wallach}Wallach, H. M. (2008). Structured topic models for language. Unpublished doctoral dissertation, Univ. of Cambridge.
 
-\bibitem{visitprediction}Sklar, M., Stewart R., Li, R., Bakula, A., \& Spears, E. (2020) Visit Prediction. US Patent App. 16/405,481, 2020
+\bibitem{visitprediction}Sklar, M., Stewart, R., Li, R., Bakula, A., \& Spears, E. (2020). U.S. Patent Application No. 16/405,481. [ Section 0037 ]
 
 \end{thebibliography}
 \end{document}

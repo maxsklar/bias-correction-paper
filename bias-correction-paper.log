@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.7.14)  27 JUL 2021 01:30
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.7.14)  7 AUG 2021 23:45
 entering extended mode
 **./bias-correction-paper.tex
 (bias-correction-paper.tex
@@ -839,12 +839,12 @@ your preamble.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-LaTeX Font Info:    Trying to load font information for U+msa on input line 41.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 28.
 
 (C:\Users\maxsk\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 41.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 28.
 
 
 (C:\Users\maxsk\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
@@ -852,68 +852,48 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 [1
 
-{C:/Users/maxsk/AppData/Local/MiKTeX/pdftex/config/pdftex.map}]
-Underfull \hbox (badness 10000) in paragraph at lines 98--102
+{C:/Users/maxsk/AppData/Local/MiKTeX/pdftex/config/pdftex.map}] [2] [3]
+[4] [5] [6]
 
- []
+LaTeX Warning: Reference `introduction' on page 7 undefined on input line 235.
 
+[7] [8] [9] [10] (bias-correction-paper.aux)
 
-Underfull \vbox (badness 6725) has occurred while \output is active []
-
- [2]
-[3] [4]
-Underfull \vbox (badness 6380) has occurred while \output is active []
-
- [5]
-[6] [7] [8] [9] [10]
-Overfull \hbox (85.69069pt too wide) in paragraph at lines 360--361
-[]\OT1/cmr/m/n/10 The pa-per Ely found that has the equa-tion in it for Bi-nary
- Lo-gis-tic: < https://onlinelibrary.wiley.com/doi/full/10.1111/coin.12123
- []
-
-
-Underfull \hbox (badness 3758) in paragraph at lines 376--377
-[]\OT1/cmr/m/n/10 Heinrich, G. (2005). Pa-ram-e-ter es-ti-ma-tion for text anal
--y-sis. Web: http://www. ar-by-lon.
- []
-
-[11] [12] (bias-correction-paper.aux)
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
- 24928 strings out of 478864
- 631466 string characters out of 2848660
- 1039559 words of memory out of 3000000
- 42419 multiletter control sequences out of 15000+600000
+ 24923 strings out of 478864
+ 631457 string characters out of 2848660
+ 1039560 words of memory out of 3000000
+ 42414 multiletter control sequences out of 15000+600000
  413471 words of font info for 65 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 99i,6n,103p,749b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 99i,8n,103p,741b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
 <C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
 cmbx10.pfb><C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
 fonts/cm/cmbx12.pfb><C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts/type1/p
-ublic/amsfonts/cm/cmbx5.pfb><C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts
-/type1/public/amsfonts/cm/cmbx7.pfb><C:/Users/maxsk/AppData/Local/Programs/MiKT
-eX/fonts/type1/public/amsfonts/cm/cmbx9.pfb><C:/Users/maxsk/AppData/Local/Progr
-ams/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/maxsk/AppData/Lo
-cal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/maxsk/A
-ppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi5.pfb><C:/Users
-/maxsk/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><
+ublic/amsfonts/cm/cmbx7.pfb><C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts
+/type1/public/amsfonts/cm/cmbx9.pfb><C:/Users/maxsk/AppData/Local/Programs/MiKT
+eX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/maxsk/AppData/Local/Prog
+rams/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/maxsk/AppData/L
+ocal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi5.pfb><C:/Users/maxsk/A
+ppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users
+/maxsk/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><
 C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr
-10.pfb><C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfont
-s/cm/cmr12.pfb><C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts/type1/public
-/amsfonts/cm/cmr17.pfb><C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts/type
-1/public/amsfonts/cm/cmr5.pfb><C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fon
-ts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/maxsk/AppData/Local/Programs/MiK
-TeX/fonts/type1/public/amsfonts/cm/cmr9.pfb><C:/Users/maxsk/AppData/Local/Progr
-ams/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/maxsk/AppData/Lo
-cal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy5.pfb><C:/Users/maxsk/Ap
-pData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/
-maxsk/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on bias-correction-paper.pdf (12 pages, 265164 bytes).
+12.pfb><C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfont
+s/cm/cmr17.pfb><C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts/type1/public
+/amsfonts/cm/cmr6.pfb><C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts/type1
+/public/amsfonts/cm/cmr7.pfb><C:/Users/maxsk/AppData/Local/Programs/MiKTeX/font
+s/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/maxsk/AppData/Local/Programs/MiKT
+eX/fonts/type1/public/amsfonts/cm/cmr9.pfb><C:/Users/maxsk/AppData/Local/Progra
+ms/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/maxsk/AppData/Loc
+al/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy5.pfb><C:/Users/maxsk/App
+Data/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/m
+axsk/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmti10.pfb>
+Output written on bias-correction-paper.pdf (10 pages, 272103 bytes).
 PDF statistics:
- 139 PDF objects out of 1000 (max. 8388607)
+ 133 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  13 words of extra memory for PDF output out of 10000 (max. 10000000)
 
