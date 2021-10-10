@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.7.14)  7 AUG 2021 23:45
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.7.14)  10 OCT 2021 02:10
 entering extended mode
 **./bias-correction-paper.tex
 (bias-correction-paper.tex
@@ -850,24 +850,122 @@ LaTeX Font Info:    Trying to load font information for U+msb on input line 28.
 (C:\Users\maxsk\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
+
+LaTeX Warning: Reference `framework' on page 1 undefined on input line 44.
+
+
+LaTeX Warning: Reference `section:problem' on page 1 undefined on input line 46
+.
+
+
+LaTeX Warning: Reference `section:solution' on page 1 undefined on input line 4
+6.
+
+
+LaTeX Warning: Reference `section:logistic' on page 1 undefined on input line 4
+6.
+
 [1
 
-{C:/Users/maxsk/AppData/Local/MiKTeX/pdftex/config/pdftex.map}] [2] [3]
-[4] [5] [6]
+{C:/Users/maxsk/AppData/Local/MiKTeX/pdftex/config/pdftex.map}] [2]
 
-LaTeX Warning: Reference `introduction' on page 7 undefined on input line 235.
+LaTeX Warning: Citation `visitprediction' on page 3 undefined on input line 78.
 
-[7] [8] [9] [10] (bias-correction-paper.aux)
+
+
+LaTeX Warning: Reference `rareevents' on page 3 undefined on input line 86.
+
+
+LaTeX Warning: Reference `weightedlogistic' on page 3 undefined on input line 8
+6.
+
+
+LaTeX Warning: Reference `king' on page 3 undefined on input line 86.
+
+[3] [4] [5]
+
+LaTeX Warning: Reference `eq:bayes' on page 6 undefined on input line 172.
+
+
+LaTeX Warning: Reference `l' on page 6 undefined on input line 188.
+
+[6]
+
+LaTeX Warning: Reference `eq:normalized_probability_model' on page 7 undefined 
+on input line 200.
+
+
+LaTeX Warning: Reference `appendix:solving' on page 7 undefined on input line 2
+07.
+
+
+LaTeX Warning: Reference `eq:bias_corrected_prob' on page 7 undefined on input 
+line 225.
+
+
+LaTeX Warning: Reference `eq:bias_corrected_prob' on page 7 undefined on input 
+line 229.
+
+[7]
+
+LaTeX Warning: Reference `framework' on page 8 undefined on input line 240.
+
+
+LaTeX Warning: Reference `eq:bias_corrected_prob' on page 8 undefined on input 
+line 251.
+
+[8]
+
+LaTeX Warning: Reference `eq:bias_corrected_setup' on page 9 undefined on input
+ line 297.
+
+
+LaTeX Warning: Reference `eq:bias_corrected_prob' on page 9 undefined on input 
+line 297.
+
+
+LaTeX Warning: Reference `eq:bias_corrected_setup' on page 9 undefined on input
+ line 297.
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [9]
+
+LaTeX Warning: Reference `eq:normalized_probability_model' on page 10 undefined
+ on input line 315.
+
+
+LaTeX Warning: Reference `eq:normalized_probability_model' on page 10 undefined
+ on input line 321.
+
+
+LaTeX Warning: Reference `eq:bias_corrected_prob' on page 10 undefined on input
+ line 321.
+
+[10]
+
+LaTeX Warning: Reference `eq:bias_corrected_prob' on page 11 undefined on input
+ line 326.
+
+
+LaTeX Warning: Reference `eq:bias_corrected_prob' on page 11 undefined on input
+ line 328.
+
+[11] (bias-correction-paper.aux)
 
 LaTeX Warning: There were undefined references.
 
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
  ) 
 Here is how much of TeX's memory you used:
- 24923 strings out of 478864
- 631457 string characters out of 2848660
- 1039560 words of memory out of 3000000
- 42414 multiletter control sequences out of 15000+600000
- 413471 words of font info for 65 fonts, out of 8000000 for 9000
+ 24932 strings out of 478864
+ 631571 string characters out of 2848660
+ 1039559 words of memory out of 3000000
+ 42421 multiletter control sequences out of 15000+600000
+ 414092 words of font info for 67 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  99i,8n,103p,741b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
 <C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
@@ -891,9 +989,9 @@ ms/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/maxsk/AppData/Loc
 al/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy5.pfb><C:/Users/maxsk/App
 Data/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/m
 axsk/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on bias-correction-paper.pdf (10 pages, 272103 bytes).
+Output written on bias-correction-paper.pdf (11 pages, 277054 bytes).
 PDF statistics:
- 133 PDF objects out of 1000 (max. 8388607)
+ 136 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  13 words of extra memory for PDF output out of 10000 (max. 10000000)
 
