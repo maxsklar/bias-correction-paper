@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.7.14)  30 OCT 2021 22:27
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.7.14)  4 NOV 2021 00:47
 entering extended mode
 **./bias-correction-paper.tex
 (bias-correction-paper.tex
@@ -851,11 +851,11 @@ LaTeX Font Warning: Size substitutions with differences
 Here is how much of TeX's memory you used:
  24913 strings out of 478864
  631180 string characters out of 2848660
- 1041560 words of memory out of 3000000
+ 1041558 words of memory out of 3000000
  42414 multiletter control sequences out of 15000+600000
  414391 words of font info for 68 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 99i,13n,103p,935b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 99i,13n,103p,933b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
 <C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
 cmbx10.pfb><C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
 fonts/cm/cmbx12.pfb><C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts/type1/p
@@ -879,7 +879,7 @@ Data/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/m
 axsk/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmti10.pfb><C
 :/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols
 /msbm10.pfb>
-Output written on bias-correction-paper.pdf (12 pages, 293826 bytes).
+Output written on bias-correction-paper.pdf (12 pages, 294653 bytes).
 PDF statistics:
  144 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
