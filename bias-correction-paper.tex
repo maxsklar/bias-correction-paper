@@ -22,7 +22,7 @@
 \title{
   Sampling Bias Correction for Supervised Machine Learning \\
   \large{
-    A  Probabilistic, Bayesian Approach
+    A Bayesian Inference Approach with Practical Applications
   }
 }
 
@@ -32,7 +32,7 @@
 \thispagestyle{empty}
 
 \begin{abstract}
-Given a supervised machine learning problem where the training set has been subject to a known sampling bias, we ask if we can still train a model to fit the original dataset. This is achieved by introducing a sampling functino to the general formulation for Bayesian inference, and deriving an altered posterior distribution for the task. This formula is then applied to the common case of binary logistic regression. We also discuss scenarios where a dataset might be subject to intentional sample bias, including the case of rare events or label imbalance.
+Given a supervised machine learning problem where the training set has been subject to a known sampling bias, we ask if we can still train a model to fit the original dataset. This is achieved by introducing a sampling function to the Bayesian inference formula, and deriving an altered posterior distribution for the task. We then apply this to the common case of binary logistic regression, and discuss scenarios where a dataset might be subject to intentional sample bias such as label imbalance.
 \end{abstract}
 
 \section{Introduction}
@@ -90,7 +90,7 @@ The literature on sampling and rare events is vast, and no comprehensive review 
 
 For general cataloging of situations with imbalanced classification and techniques for it's mitigation, see the work of Maalouf and Trafalis\cite{rareevents}. The readjustment formulas in the case of logistic regression can be found in Maalouf and Siddiqi\cite{weightedlogistic}. For an in-depth discussion on rare events in logistic regression, the problems associated with it, and the mathematics of parameter estimation, see King and Zeng\cite{king}.
 
-\section{Supervised Machine Learning Framework} \label{framework}
+\section{Supervised Machine Learning} \label{framework}
 
 The following is a typical setup for supervised machine learning using a Bayesian framework, a variation of what can be found in general treatments of probabilistic inference\cite{pythonbayes}\cite{gelmanbayes}\cite{blais}. The terminology and variable names will be reused in subsequent sections.
 
@@ -102,7 +102,7 @@ The training dataset \(D \in (X \times Y)^N\) consists of \(N\) examples of inpu
 
 Instances are labelled with a subscript \((x_n, y_n)\), where \(n \in \{0, 1, 2,\ldots,N-1\}\), or \(n \in N\) in ordinal notation.
 
-\subsection{Hypothesis Space}
+\subsection{The Hypothesis Space}
 
 Let \(H\) be the \textit{hypothesis space} whose members \(h \in H\) each encode a potential solution to the prediction problem. We assume that one of these solutions is correct. This temporary assumption makes Bayesian inference possible.
 
@@ -314,11 +314,15 @@ Now instead of \(\mathbf{s}: X \times Y \rightarrow \left [ 0, 1\right ]\), the 
 
 \subsection{The Value of an Instance}
 
-Finally, there is much work to be done in quantifying the expected value that an instance will bring if included in \(D\). The complication here is that we don't know how much a datapoint will change the posterior distribution before it is included, and the goal of the original problem could have different values on the tradeoffs. For example, maybe the ability to classify certain inputs is more valuable than others.
+The ability to quantify and quickly estimate the expected value that an instance will provide if included in \(D\) would allow engineers to deploy samplers that eliminate unneccesary work.
 
-Therefore, the ability to quickly estimate the value that an instance provides versus the cost of including it would eliminate unneccary work.
+Perhaps insights on sampling can be borrowed from the field of \textit{active learning}, where learners can directly choose inputs to query. Angluin\cite{angluin} provides foundational analysis on the efficiencies that can be achived with active strategies. Many such strategies have been deployed for statistical models, and for example Cohn et al.\cite{active} propose selecting input data to minimize learner variance.
 
-Additionally, several predictors can be created in a similar manner, each with a different sampling function representing different valuations of the data points. If these are be combined in an \textit{ensemble model}, they will likely perform better than in the singular approach. Because they can be run in parallel, and each part runs quickly with a small sample size, this provides real engineering benefits.
+Ultimately, we do not know in general how much a datapoint will change the posterior distribution before it is included, but estimation techniques could be developed. The engineer must also consider the specific goals and tradeoffs of the project to inform the sampling strategy. 
+
+\subsection{Ensemble Models}
+
+If models produced from several sampling functions can be combined in an \textit{ensemble model}, they will likely perform better than in the singular approach. Because they can be run in parallel, and each part runs quickly with a small sample size, this provides real engineering benefits.
 
 \begin{appendices}
 
@@ -366,7 +370,9 @@ If we assume that there was no sampling, or the sampling was uniform where \(\ma
 
 \begin{thebibliography}{20}
 
+\bibitem{angluin}Angluin, D. (1988). Queries and concept learning. Machine learning, 2(4), 319-342.
 \bibitem{blais}Blais, B. S. (2014). Statistical Inference for Everyone (sie).
+\bibitem{active}Cohn, D. A., Ghahramani, Z., \& Jordan, M. I. (1996). Active learning with statistical models. Journal of artificial intelligence research, 4, 129-145.
 \bibitem{gelmanbayes}Gelman, A., Carlin, J. B., Stern, H. S., Dunson, D. B., Vehtari, A., \& Rubin, B. D. (2013). Bayesian Data Analysis. 3rd edition.
 \bibitem{gelman}Hoffman, M. D., \& Gelman, A. (2014). The No-U-Turn sampler: adaptively setting path lengths in Hamiltonian Monte Carlo. J. Mach. Learn. Res., 15(1), 1593-1623.
 \bibitem{king}King, G., \& Zeng, L. (2001). Logistic regression in rare events data. Political analysis, 9(2), 137-163.
