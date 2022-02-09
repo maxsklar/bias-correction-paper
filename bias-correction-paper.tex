@@ -56,30 +56,34 @@ Unlike ad-hoc methods for correcting bias after a model has been created, this m
 
 \section{Motivation}
 
-While big data has unlocked incredible new applications of machine learning, the accompanied processing comes at a heavy cost in terms of time, money, and energy. Many algorithms will perform just as well or almost as well had they been trained on a fraction of the available data. Therefore, removing data from the training set is a legitimate design decision.
+While big data has unlocked incredible new applications of machine learning, the accompanied processing comes at a heavy cost in terms of time, money, and energy. Part of this cost is related to the size of the dataset being used to learn models.
 
-One way to slim down the training set is through \textit{uniform random sampling}, where each instance in the original dataset has an equal probability of inclusion. This process ignores the fact that some training examples are more valuable than others, particularly when there is a classification imbalance.
+This raises a question for the machine learning practitioner: should we use all the data available to us in the training of a model? Should we even take steps to procure additional data that we currently do not have? Sometimes the answer is yes. When data is scarce, each additional piece of information help us learn a better model. But as the amount of data starts increasing by orders of magnitude, this improvement in model fit starts to diminish, and the cost of training it increases. At some point the cost of obtaining and training on more data exceeds the value of the improvements to the model.
+
+There is even a point where additional data adds zero value as model impovements start amounting to a rounding error. This could happen very quickly on simple models (for example, a linear regression in few variables) or it could never happen (perhaps in a deep learning setup). The point is that depending on the situation, the practitioner may choose to remove data from consideration, and this is a legitamate design decision.
+
+One way to slim down the training set is through \textit{uniform random sampling}, where each instance in the original dataset has an equal probability of inclusion. This process ignores the fact that some training examples are more valuable than others, particularly when there is a classification imbalance. Therefore, we may choose to remove data in a non-random fashion as the following examples illustrate.
 
 \subsection{Example: Theoretical Image Recognition}
 \label{section:lion}
 
-Suppose that the goal is to train an image recognition algorithm to detect lions. The training data contains 2000 images of lions, and 400,000 images that are \textbf{not} lions. Consider the following 3 sampling schemes.
+Suppose that the goal is to train an image recognition algorithm to detect lions. The training data contains 2000 images of lions, and 400,000 images that are \textbf{not} lions. We choose an approach to modelling these images (perhaps a convolutional neural net) and decide that we may want to sample out some of the data. Consider the following 3 sampling schemes.
 
 \begin{enumerate}[label=(\Alph*)]
-\item Train on all of the data (2000 Lions, 400000 Non-Lions)
-\item Randomly sample 25 percent of the data (500 Lions, 100000 Non-Lions)
-\item Randomly sample a quarter of ONLY the non-lion images (2000 Lions, 100000 Non-Lions)
+\item \label{train_on_all_data} Train on all of the data (2000 Lions, 400000 Non-Lions)
+\item \label{train_on_randomly_sampled}Randomly sample 25 percent of the data (500 Lions, 100000 Non-Lions)
+\item \label{training_on_non_rs} Randomly sample a quarter of ONLY the non-lion images (2000 Lions, 100000 Non-Lions)
 \end{enumerate}
 
 Each option comes with tradeoffs.
 
-Option A uses all of the available data and takes the most time and resources to train. In theory, this will produce a model that is at least as good as any of the others. In practice this might not be the case because the search algorithm is imperfect. For example, if a \textit{mini-batch} system is used to find gradients and search for the best model, it might not converge as easily with an imbalanced dataset.
+\ref{train_on_all_data} uses all of the available data and takes the most time and resources to train. In theory, this will produce a model that is at least as good as any of the others.
 
-Option B has all the imbalance of A, but with fewer instances. The learning algoithm will run faster, but will likely product worse results. Any classifier must rely on lion photos to learn lions, and those have become quite scarce! A reduction in lion photos from 2000 to 500 will make a significant negative impact. Because of the imbalance, each lion photo is much more valuable to our success than a non-lion photo. 
+\ref{train_on_randomly_sampled} has fewer instances than \label{train_on_all_data} but with the same label imbalance. The learning algoithm will run faster, but will likely product worse results. Any classifier must rely on lion photos to learn lions, and those have become quite scarce! A reduction in lion photos from 2000 to 500 will make a significant negative impact. Because of this imbalance, each lion photo becomes much more valuable than a non-lion photo. 
 
-Option C, like option B, demands fewer resources. The difference now is that all 2000 lion photos remain. The likely outcome is that option C performs far better than option B. It might even perform as well as option A! If this is the case, then C is the best choice.
+\ref{training_on_non_rs}, like \ref{train_on_randomly_sampled}, demands fewer resources. The difference now is that all 2000 lion photos remain. The likely outcome is that the model from \ref{training_on_non_rs} performs far better than \ref{train_on_randomly_sampled}. It might even perform as well as \ref{train_on_all_data}! It seems to be the best choice.
 
-Because option C only removed non-lion images, it will learn that lions are more common than they really are in the underlying dataset. Our sampling method and therefore our derived dataset now have a \textit{bias} towards lions over non-lions. This causes it to overpredict the lions, particularly in those marginal cases where it is uncertain.
+Because \ref{training_on_non_rs} only removed non-lion images, it will learn that lions are more common than they really are in the underlying dataset. Our sampling method and therefore our derived dataset now have a \textit{bias} towards lions over non-lions. This causes it to overpredict the lions, particularly in those marginal cases where it is uncertain.
 
 Hopefully the underlying image recognition algorithm will derive the core visual features of a lion and will not have that issue even without need for correction, but such a correction is desirable.
 
@@ -90,7 +94,7 @@ In the image recognition example, bias correction is desirable. In other cases, 
 
 An iteration of Foursquare’s attribution model\cite{visitprediction} provides a clear example. The company's attribution product measures the ability of an advertisement to drive consumers to physical locations such as a retail chain. In order to estimate causality, the Foursquare data pipeline must first learn the base probability that any given individual will visit that chain on a given day.
 
-Foursquare's data set has many examples of visits, but examples of people who “did not visit” on any given day outnumbers visit by several orders of magnitude. Therefore, it makes sense to downsample those non-visits. Because ad measurement products must produce precise probabilities, that sampling must be accounted for appropriately. This was ultimately achieved through the bias correction formula for logistic regression in section \ref{section:logistic}.
+Foursquare's data set has many examples of visits, but examples of people who “did not visit” on any given day outnumbers visit by several orders of magnitude. Therefore, it makes sense to downsample those non-visits. Because the value of an ad measurement product is in its accuracy, the bias sampling must be accounted for precisely. This was ultimately achieved through the bias correction formula for logistic regression in section \ref{section:logistic}.
 
 \subsection{Similar and Adjacent Work}
 
@@ -172,19 +176,17 @@ Going forward, any terms on the right hand side of this proportionality that are
 
 \subsection{Selecting and Sampling Predictors}
 
-The final learning task is to either \textit{select} or \textit{sample} predictors that best explain the data. This process involves a search of \(H\) and is often identified as the search algorithm or learning algorithm.
+The final learning task is to either \textit{select} or \textit{sample} predictors that best explain the data. This process involves a search of \(H\) and is identified as the search algorithm or learning algorithm.
 
-The goal of selection is to identify a single optimal predictor. The most obvious example is the \textit{maximum a posteriori} (MAP) estimate which chooses the predictor with the highest posterior probability. The \textit{maximum likelihood estimate} (MLE) finds the predictor that assigns the highest likelihood to the dataset, and ignores priors altogether.
+The goal of selection is to identify a single optimal predictor. The most obvious variable to optimize is the posterior probability (or PDF value) and this is called the \textit{maximum a posteriori} (MAP) estimate. The \textit{maximum likelihood estimate} (MLE) finds the predictor that assigns the highest likelihood to the dataset, ignoring priors altogether. Techniques to find this optimal predictor include hill climbing and gradient descent. The newton-raphson method converges faster than gradient descent and this author has used it to calculate the MLE for the Dirichlet-multinomial problem.\cite{sklar_dirichlet}
 
-Under sampling, a predictor is randomly pulled from the posterior distribution or something approximating it. If several models are sampled we can obtain a wide variety of possible solutions that are still consistent with the data.
+Under sampling, a predictor is randomly pulled from the posterior distribution or something approximating it. If several models are sampled we can obtain a wide variety of possible solutions that are still consistent with the data. Markov Chain Monte Carlo methods are used for sampling. A good example of this is the \textit{No U-Turn Sampler}\cite{gelman} popular in the PyMC3\cite{pymc3} probabilistic programming package for python.
 
-Many methods for selection and sampling have been developed. These techniques include hill climbing and gradient descent for selection, and Markov Chain Monte Carlo for sampling. A good example of the latter is the \textit{No U-Turn Sampler}\cite{gelman} popular in the PyMC3\cite{pymc3} probabilistic programming package for python. The author has also deployed the Newton Raphson method for gradient descent to calculate the MLE.\cite{sklar_dirichlet}
-
-It is more convenient to work with a \textit{negative log-likelihood loss} function than the posterior distribution directly.\footnote{For a great treatment on loss functions and their various tradeoffs, see A Tutorial on Energy Based Learning by Lecun\cite{lecun}. The work also discusses strategies for dealing with predictors where normalization over \(Y\) is not practical thus avoiding \(\hat{f_h}\).} Negative-log likelihood turns products into sums, and produces values that are within a reasonable order of magnitude for computation. We get this by applying \(-\ln(\ldots)\) to the right hand side of equation~\eqref{eq:bayes_likelihood_expanded}.
+The \textit{negative log-likelihood loss} function is more convenient for these learning algorithms than the posterior distribution directly.\footnote{For a great treatment on loss functions and their various tradeoffs, see A Tutorial on Energy Based Learning by Lecun\cite{lecun}. The work also discusses strategies for dealing with predictors where normalization over \(Y\) is not practical thus avoiding \(\hat{f_h}\).} Negative-log likelihood turns products into sums, and produces values that are within a reasonable order of magnitude. We get this by applying \(-\ln(\ldots)\) to the right hand side of equation~\eqref{eq:bayes_likelihood_expanded}.
 
 \[L(h)=-\sum_{n \in N} \ln(\hat{f}_h(x_n,y_n))-\ln(\mathbf{P}(h))\]
 
-Let each hypothesis comes with its own negative log-likelihood loss function \(l_h\) where \(\hat{f}_h(x_n,y_n)\propto e^{-l_h(x_n,y_n)}\) and the prior \(\mathbf{P}(h)\) can be reduced to a \textit{regularization function} \(\mathbf{r}(h)\) where \(\mathbf{P}(h)\propto e^{-\mathbf{r}(h)}\). The final form of the loss function is therefore
+Let each hypothesis comes with its own negative log-likelihood loss function \(l_h\) where \(\hat{f}_h(x_n,y_n)\propto e^{-l_h(x_n,y_n)}\) and the prior \(\mathbf{P}(h)\) can be reduced to a \textit{regularization function} \(\mathbf{r}(h)\) where \(\mathbf{P}(h)\propto e^{-\mathbf{r}(h)}\). The final form of the loss function is
 
 \[L(h)=\sum_{n \in N} l_h(x_n,y_n)+\mathbf{r}(h).\]
 
@@ -305,7 +307,7 @@ The derivative on a single weight \(\mathbf{w}_f\) or intercept \(c\) can be com
 
 \subsection{Simple Random Sampling}
 
-\textit{Simple Random Sampling} (SRS) is where an exact number of datapoints are retained in the dataset. The point-wise sampling function \(\mathbf{s}\) can never guarantee a specified number of instances will be selected. Simple Random Sampling can furthermore be stratefied by label to account for rare events. Because the sampling process is no longer independent by instance, deriving the formula is far more complex task.
+Our sampling function \(\mathbf{s}\) decides on the inclusion of each training instance independently. Such a sampling function can never guarantee a exactly specified number of instances will be selected. When an exact number of datapoints are retained, this is called \textit{Simple Random Sampling} (SRS). Simple Random Sampling can be stratefied by label to correct for the imbalance of rare events. Because the sampling process is no longer independent by instance, deriving the posterior formula is now far more complex task.
 
 \subsection{Oversampling}
 
@@ -320,6 +322,10 @@ The ability to quantify and quickly estimate the expected value that an instance
 Perhaps insights on sampling can be borrowed from the field of \textit{active learning}, where learners can directly choose inputs to query. Angluin\cite{angluin} provides foundational analysis on the efficiencies that can be achived with active strategies. Many such strategies have been deployed for statistical models, and for example Cohn et al.\cite{active} propose selecting input data to minimize learner variance.
 
 Ultimately, we do not know in general how much a datapoint will change the posterior distribution before it is included, but estimation techniques could be developed. Engineers must also consider the specific goals and tradeoffs of a project to inform their choice of sampling strategy. 
+
+\subsection{Stochastic Gradient Descent and Mini-Batch Training}
+
+Many machine learning algorithms choose to look at training instances one at a or in small batches (mini-batch) instead of all at once. These algorithms can also incorporate bias data selection and bias correction.
 
 \subsection{Ensemble Models}
 
