@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.7.14)  18 NOV 2021 13:19
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.7.14)  9 FEB 2022 00:40
 entering extended mode
 **./bias-correction-paper.tex
 (bias-correction-paper.tex
@@ -834,28 +834,32 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 
 LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <153.57375> not available
-(Font)              size <24.88> substituted on input line 54.
+(Font)              size <24.88> substituted on input line 52.
 
 [1{C:/Users/maxsk/AppData/Local/MiKTeX/pdftex/config/pdftex.map}
 
 ] [2]
-Underfull \vbox (badness 2538) has occurred while \output is active []
+Underfull \vbox (badness 2065) has occurred while \output is active []
 
  [3]
-[4] [5] [6] [7] [8] [9] [10] [11] [12] (bias-correction-paper.aux)
+[4] [5] [6] [7] [8] [9]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [10]
+[11] [12] (bias-correction-paper.aux)
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 128.69374pt have occurred.
 
  ) 
 Here is how much of TeX's memory you used:
- 24918 strings out of 478864
- 631228 string characters out of 2848660
- 1042560 words of memory out of 3000000
- 42419 multiletter control sequences out of 15000+600000
+ 24919 strings out of 478864
+ 631253 string characters out of 2848660
+ 1041558 words of memory out of 3000000
+ 42420 multiletter control sequences out of 15000+600000
  414391 words of font info for 68 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 99i,13n,103p,764b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 99i,13n,103p,805b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
 <C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
 cmbx10.pfb><C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
 fonts/cm/cmbx12.pfb><C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts/type1/p
@@ -881,7 +885,7 @@ axsk/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy5.pfb><C:
 .pfb><C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/
 cm/cmti10.pfb><C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts/type1/public/
 amsfonts/symbols/msbm10.pfb>
-Output written on bias-correction-paper.pdf (12 pages, 315197 bytes).
+Output written on bias-correction-paper.pdf (12 pages, 315708 bytes).
 PDF statistics:
  154 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
