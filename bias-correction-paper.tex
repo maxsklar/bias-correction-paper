@@ -26,8 +26,8 @@
   }
 }
 
-\author{Max Sklar}
-%\date{March 9, 2022}
+\author{Max Sklar \\ Local Maximum Labs \\ March 14, 2022}
+\date{}
 
 \maketitle
 \thispagestyle{empty}
@@ -191,6 +191,9 @@ Let each hypothesis come with its own negative log-likelihood loss function \(l_
 
 \[L(h)=\sum_{n \in N} l_h(x_n,y_n)+\mathbf{r}(h).\]
 
+At this point, \(L(h)\) can be used to feed various algorithms. For example, gradient descent can be used if the function has a derivative.
+
+\pagebreak
 \section{The Sampling Problem}
 \label{section:problem}
 
@@ -258,53 +261,93 @@ Use equation~\eqref{eq:bias_corrected_prob} to get this in terms of \(f_h\):
 
 \[\mathbf{P}(h|D,\mathbf{s})\propto\prod_{n \in N} \left[\frac{f_h(x_n,y_n)\mathbf{s}(x_n,y_n)}{\sum_{y \in Y}f_h(x_n,y)\mathbf{s}(x_n,y)}\right]\mathbf{P}(h)\]
 
-Finally, derive a negative log-likelihood loss function on \(h\):
+Finally, derive a negative log-likelihood loss function on \(h\).
 
-\[L(h)= \sum_{n \in N} \left[l_h(x_n,y_n)-\ln\mathbf{s}(x_n,y_n)+\ln\sum_{y \in Y}f_h(x_n,y)\mathbf{s}(x_n,y) \right] +\mathbf{r}(h)\]
+\begin{equation}
+\label{eq:bias_corrected_loss_function}
+L(h)= \sum_{n \in N} \left[l_h(x_n,y_n)-\ln\mathbf{s}(x_n,y_n)+\ln\sum_{y \in Y}f_h(x_n,y)\mathbf{s}(x_n,y) \right] +\mathbf{r}(h)
+\end{equation}
+
+\pagebreak
 
 \section{Solution for Binary Logistic Regression}
 \label{section:logistic}
 
-\textit{Binary logistic regression} is a special case of the supervised learning problem in section \ref{framework} with the following additional properties:
+\textit{Binary logistic regression} is a special case of the supervised learning problem in section \ref{framework}. We will use it here to provide a specific example to the bias correction framework because it is particularly widespead and straightforward. Our problem is set up as follows:
 
 \begin{enumerate}
 	\item It is a \textit{binary classification} in that \(Y = \{0, 1\}\).
-	\item The input space \(X\) is a list of real valued features. \(F\) denotes a finite set of features, \(X = \mathbb{R} ^{|F|}\).
+	\item Each input \(x \in X\) is a collection of real numerical values for each \textit{feature}. If \(F\) denotes a finite set of features, then \(X = \mathbb{R} ^{|F|}\).
 	\item Each predictor \(h \in H\) is parameterized by \(h = (c, \mathbf{w})\) where \(c \in \mathbb{R}\) is the intercept and \(\mathbf{w} \in \mathbb{R}^{|F|}\) is an \(|F|\)-dimensional vector of weights corresponding to each feature.
-          \item Each hypothesis \((c, \mathbf{w}) \in H\) corresponds to the following PDF, given here in both normalized and unnormalized form.
+          \item Each hypothesis \((c, \mathbf{w}) \in H\) corresponds to the following PDF, given here in both normalized and unnormalized form. In this case, \(\hat{f}_{c,\mathbf{w}}\) is a form of the \textit{sigmoid} function.
           \begin{align}
-          \hat{f}_{c,\mathbf{w}}(x_n, y_n)=\frac{e^{y_n \cdot (c+\mathbf{w} \cdot x_n)}}{1+e^{c+\mathbf{w} \cdot x_n}} &
-          \qquad f_{c,\mathbf{w}}(x_n, y_n)=e^{y_n \cdot (c+\mathbf{w} \cdot x_n)}
+	   \label{eq:logistic_original_sigmoid}
+          f_{c,\mathbf{w}}(x_n, y_n)=e^{y_n \cdot (c+\mathbf{w} \cdot x_n)} &
+          \qquad\hat{f}_{c,\mathbf{w}}(x_n, y_n)=\frac{e^{y_n \cdot (c+\mathbf{w} \cdot x_n)}}{1+e^{c+\mathbf{w} \cdot x_n}}
          \end{align}
 \end{enumerate}
 
-Use equation~\eqref{eq:bias_corrected_prob} to get
+\subsection{Formula for the Posterior Distribution}
 
-\[\mathbf{P}(y_n|x_n,h,\mathbf{s})=\frac{f_h(x_n,y_n)\mathbf{s}(x_n,y_n)}{\sum_{y \in Y}f_h(x_n,y)\mathbf{s}(x_n,y)}=\frac{e^{y_n \cdot (c+\mathbf{w} \cdot x_n)}\mathbf{s}(x_n,y_n)}{\mathbf{s}(x_n,0)+e^{c+\mathbf{w} \cdot x_n}\mathbf{s}(x_n,1)}.\]
+Use equation~\eqref{eq:bias_corrected_prob} for the bias-corrected likelihood to get
 
-These problems are often framed to focus on the probability of the \textit{target condition} \(y_n = 1\). This target condition is usually the rare event that triggered the decision to use biased sampling, and would correspond to the lion image in section \ref{section:lion} and the visit in section \ref{section:visit}. We can solve for it as follows:
+\[\mathbf{P}(y_n|x_n,c,\mathbf{w},\mathbf{s})=\frac{f_{c,\mathbf{w}}(x_n,y_n)\mathbf{s}(x_n,y_n)}{\sum_{y \in Y}f_{c,\mathbf{w}}(x_n,y)\mathbf{s}(x_n,y)}=\frac{e^{y_n \cdot (c+\mathbf{w} \cdot x_n)}\mathbf{s}(x_n,y_n)}{\mathbf{s}(x_n,0)+e^{c+\mathbf{w} \cdot x_n}\mathbf{s}(x_n,1)}.\]
+
+We introduce \(\mathbf{s}_r: X \to [0, \infty]\) as the \textit{sample ratio} for each input \(x \in X\). This ratio is all that is needed to correct for sampling bias in any binary classification. We divide through by \(\mathbf{s}(x_n,1)\) to obtain the following.
 
 \begin{align}
-\mathbf{P}(y_n=1|x_n,h,\mathbf{s})=\frac{e^{c+\mathbf{w} \cdot x_n}\mathbf{s}(x_n,1)}{\mathbf{s}(x_n,0)+e^{c+\mathbf{w} \cdot x_n}\mathbf{s}(x_n,1)}=\frac{e^{c+\mathbf{w} \cdot x_n}}{\mathbf{s}_r(x_n)+e^{c+\mathbf{w} \cdot x_n}} &
+\mathbf{P}(y_n|x_n,c,\mathbf{w},\mathbf{s})=\frac{e^{y_n \cdot (c+\mathbf{w} \cdot x_n)}\mathbf{s}_r(x_n)^{1 - y_n}}{\mathbf{s}_r(x_n)+e^{c+\mathbf{w} \cdot x_n}}
 \qquad \textrm{where} \quad \mathbf{s}_r(x_n)=\frac{\mathbf{s}(x_n, 0)}{\mathbf{s}(x_n, 1)}
 \end{align}
 
-Here, \(\mathbf{s}_r: X \to [0, \infty]\) is the true-to-false \textit{sample ratio} for each instance \(n\). This ratio is all that is needed to correct for sampling bias in any binary classification. Note that for \(\mathbf{s}_r(x_n)=1\), we are left with the original binary logistic regression formula.
+These problems are often framed to focus on the probability of the \textit{target condition} \(y_n = 1\). This target condition is usually the rare event that triggered the decision to use biased sampling, and would correspond to the lion image in section \ref{section:lion} and the visit in section \ref{section:visit}. We can solve for it as follows:
 
-For the prior, we can use a Gaussian distribution (aka L2, or ridge regression) with weight \(\lambda\) so:
+\begin{equation}
+\label{eq:logistic_corrected_targed_prob}
+\mathbf{P}(y_n = 1|x_n,c,\mathbf{w},\mathbf{s})=\frac{e^{c+\mathbf{w} \cdot x_n}}{\mathbf{s}_r(x_n)+e^{c+\mathbf{w} \cdot x_n}}
+\end{equation}
 
-\[\mathbf{r}(c,\mathbf{w})=\frac{1}{2}\lambda(\mathbf{w} \cdot \mathbf{w})\]
+Note that when \(\mathbf{s}_r(x_n) = 1\), we return to the pre-bias correction formula of equation~\eqref{eq:logistic_original_sigmoid}. This makes sense because a sampling ratio of 1 means that instances of both labels are being removed from the dataset at the same rate, thus yielding uniform random sampling.
 
-Put this together and drop some constant factors to derive a negative log-likelihood loss function.
+\subsection{Finding a Suitable Loss Function}
 
-\[L(h)=\sum_{n \in  N} \left (\ln\left (\mathbf{s}_r(x_n)+e^{c+\mathbf{w} \cdot x_n}\right ) -y_n \cdot (c+\mathbf{w} \cdot x_n) \right )+ \frac{1}{2}\lambda(\mathbf{w} \cdot \mathbf{w})\]
+Logistic regression is very amenable towards building a loss function. The first step is to  decide upon \(l_{c,\mathbf{w}}: X \times Y \rightarrow \mathbb{R}\) by taking the minus log of \(\mathbf{P}(y_n|x_n,c,\mathbf{w},\mathbf{s})\).
 
-The derivative on a single weight \(\mathbf{w}_f\) or intercept \(c\) can be computed into the following simple form in order to perform gradient descent.
+\begin{equation}
+\label{eq:minus_log_prob_logistic}
+-\ln \mathbf{P}(y_n|x_n,c,\mathbf{w},\mathbf{s})=\ln\left(\mathbf{s}_r(x_n)+e^{c+\mathbf{w} \cdot x_n}\right) - y_n \cdot (c+\mathbf{w} \cdot x_n) - (1 - y_n) \ln \mathbf{s}_r(x_n)
+\end{equation}
+
+Because \(\mathbf{P}(y_n|x_n,c,\mathbf{w},\mathbf{s})\) only needs to be proportional to \(e^{-l_n(x_n,y_n)}\) with respect to \(c\) and \(\mathbf{w}\), we may remove the final term in equation~\eqref{eq:minus_log_prob_logistic} to get an equivalent (and simpler) formula for \(l_{c,\mathbf{w}}\).
+
+\begin{equation}
+\label{eq:corrected_logistic_loss}
+l_{c,\mathbf{w}}(x_n,y_n)=\ln\left(\mathbf{s}_r(x_n)+e^{c+\mathbf{w} \cdot x_n}\right) - y_n \cdot (c+\mathbf{w} \cdot x_n)
+\end{equation}
+
+For the regularization term, we can use \textit{L2} or \textit{ridge regression} on the weights with parameter \(\lambda\).
 
 \begin{align}
-\frac{\partial}{\partial \mathbf{w}_f }L(h)=\sum_{n \in  N} x_{n,f}\left(\frac{e^{c+\mathbf{w} \cdot x_n}}{\mathbf{s}_r(x_n)+e^{c+\mathbf{w} \cdot x_n}} -y_n  \right )+ \lambda \cdot w_f
-\qquad \frac{\partial}{\partial c}L(h)=\sum_{n \in  N} \left(\frac{e^{c+\mathbf{w} \cdot x_n}}{\mathbf{s}_r(x_n)+e^{c+\mathbf{w} \cdot x_n}}  -y_n\right )
+\label{eq:l2_regularization}
+\mathbf{P}(c,\mathbf{w}) \propto e^{-\frac{1}{2}\lambda(\mathbf{w} \cdot \mathbf{w})}&
+\qquad\mathbf{r}(c,\mathbf{w})=\frac{1}{2}\lambda(\mathbf{w} \cdot \mathbf{w})
 \end{align}
+
+This is equivalent to putting a normal (or gaussian) prior distribution on each weight independently with a mean of \(0\) and a \textit{precision} of lambda. A large lambda produces a stronger prior which will encourage weights closer to 0. The parameter \(c\) is not given a gaussian prior here, and without it we are actually assuming a uniform, improper prior over all real numbers. It is actually common not to regularize the intercept.
+
+Use equation~\eqref{eq:bias_corrected_loss_function} to derive the negative log-likelihood loss function by plugging in formulas from equations \eqref{eq:corrected_logistic_loss} and \eqref{eq:l2_regularization}.
+
+\[L(c,\mathbf{w})=\sum_{n \in  N} \left (\ln\left (\mathbf{s}_r(x_n)+e^{c+\mathbf{w} \cdot x_n}\right ) -y_n \cdot (c+\mathbf{w} \cdot x_n) \right )+ \frac{1}{2}\lambda(\mathbf{w} \cdot \mathbf{w})\]
+
+The derivative on a single weight \(\mathbf{w}_f\) or intercept \(c\) can be computed into the following simple form in order to run a gradient descent.
+
+\[\frac{\partial}{\partial \mathbf{w}_f }L(c,\mathbf{w})=\sum_{n \in  N} x_{n,f}\left(\frac{e^{c+\mathbf{w} \cdot x_n}}{\mathbf{s}_r(x_n)+e^{c+\mathbf{w} \cdot x_n}} -y_n  \right )+ \lambda \cdot w_f\]
+\[\frac{\partial}{\partial c}L(c,\mathbf{w})=\sum_{n \in  N} \left(\frac{e^{c+\mathbf{w} \cdot x_n}}{\mathbf{s}_r(x_n)+e^{c+\mathbf{w} \cdot x_n}}  -y_n\right )\]
+
+If the target probabilities in equation~\eqref{eq:logistic_corrected_targed_prob} are pre-computed, these simplify even further!
+
+\[\frac{\partial}{\partial \mathbf{w}_f }L(c,\mathbf{w})=\sum_{n \in  N} x_{n,f}\left(\mathbf{P}(y_n = 1|x_n,c,\mathbf{w},\mathbf{s}) -y_n  \right )+ \lambda \cdot w_f\]
+\[\frac{\partial}{\partial c}L(c,\mathbf{w})=\sum_{n \in  N} \left(\mathbf{P}(y_n = 1|x_n,c,\mathbf{w},\mathbf{s})  -y_n\right )\]
 
 \section{Future Work}
 \label{section:future_work}
