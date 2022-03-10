@@ -105,7 +105,7 @@ For general cataloging of situations with imbalanced classification and techniqu
 
 \section{Supervised Machine Learning} \label{framework}
 
-The following is a typical setup for supervised machine learning using a Bayesian framework, a variation of what can be found in general treatments of probabilistic inference\cite{pythonbayes}\cite{gelmanbayes}\cite{blais}. The terminology and variable names will be reused in subsequent sections.
+The following is a typical setup for supervised machine learning using a Bayesian framework, a variation of what can be found in general treatments of probabilistic inference\cite{blais}\cite{gelmanbayes}\cite{pythonbayes}. The terminology and variable names will be reused in subsequent sections.
 
 \subsection{Given Parameters}
 
@@ -125,7 +125,7 @@ In some setups, the predictors \(h \in H\) are \textit{directly predicting} \(y 
 
 \begin{enumerate}
 	\item \(Y\) is finite. This is a \textit{classification} problem. Each predictor takes an input \(x \in X\) and returns a probability for each \(y \in Y\) that sums to one.
-	\item \(Y\) is discrete but infinite. The predictor still assigns a number to each potential output, but now the infinite sum adds to one.
+	\item \(Y\) is discrete but infinite. The predictor still assigns a number to each potential output, but now the infinite sum converges to one.
 	\item \(Y\) is continuous. This is a \textit{regression} problem. The predictor returns a \textit{probability distribution function} (PDF) over \(Y\), which integrates to one.
 \end{enumerate}
 
@@ -141,7 +141,7 @@ Because these values may not be normalized at first, we identify each predictor 
 
 \subsection{Deriving the Prior, Likelihood, and Posterior}
 
-The \textit{prior distribution} over \(H\) is a probability distribution representing our initial belief over which predictor is correct. Typically this will be an \textit{uninformative prior} which encodes our absense of knowledge of the problem. It is also common to incorporate \textit{Occam's Razor}, which penalizes more complex predictors, or to use a prior that is mathematically convenient. We will use \(\mathbf{P}(h)\) as the \textit{prior probability} of predictor \(h \in H\). This may denote a discrete probability or a value in a PDF in the continuous case.
+The \textit{prior distribution} over \(H\) is a probability distribution representing our initial belief over which predictor is correct. Typically this will be an \textit{uninformative prior} which encodes our absense of knowledge of the problem. It is also common to incorporate \textit{Occam's Razor}, which penalizes more complex predictors, or to use a prior that is mathematically convenient. We will use \(\mathbf{P}(h)\) as the \textit{prior probability} of predictor \(h \in H\). \(\mathbf{P}(h)\) may be a discrete probability or a PDF value.
 
 \(\mathbf{P}(h)\) does not need to be normalized. It is enough that it represents a relative probability function on \(h\) which preserves the ratio of the probabilities between two predictors. We are open to the possibility that \(\mathbf{P}(h)\) is an \textit{improper probability distribution function}. For example, a PDF that assigns 1 to each real number if \(H=\mathbb{R}\) cannot be normalized, but can still be used. More importantly, allowing the prior to be unnormalized means that we can use distributions whose integral or sum is difficult to compute.
 
@@ -161,7 +161,7 @@ Bayes rule for discrete \(H\) finds the posterior probability of each \(h \in H\
 \qquad\mathbf{P}(h|D)=\frac{\mathbf{P}(D|h)\mathbf{P}(h)}{\int_{h' \in H}\mathbf{P}(D|h')\mathbf{P}(h')}
 \end{align}
 
-Most learning algorithms only require an unnormalized \(\mathbf{P}(h|D)\). We rewrite the equality as a proportionality statement and remove the denominator. This form also allows the prior \(\mathbf{P}(h)\) to be unnormalized as well, and generalizes both the discrete and continuous case.
+Most learning algorithms only require an unnormalized \(\mathbf{P}(h|D)\). We rewrite the equality as a proportionality statement and remove the denominator. This form allows the prior \(\mathbf{P}(h)\) to be unnormalized as well, and covers both the discrete and continuous case.
 
 \begin{equation}
 \label{eq:bayes}
@@ -209,11 +209,11 @@ Start with the unnormalized Bayes rule in equation~\eqref{eq:bayes}, but now con
 
 \[\mathbf{P}(h|D,\mathbf{s})\propto\mathbf{P}(D|h,\mathbf{s})\mathbf{P}(h)\]
 
-Let \(\mathbf{P}(x_n \in D^+)\) represent the probability that any given input \(x_n\) will appear in the unbiased dataset \(D^+\). We break down the likelihood as follows.
+We break down the likelihood as follows.
 
-\[\mathbf{P}(D|h,s)=\prod_{n \in N} \mathbf{P}(x_n,y_n|h,\mathbf{s})=\prod_{n \in N} \mathbf{P}(x_n \in D^+)\mathbf{P}(y_n|x_n,h,\mathbf{s})\propto\prod_{n \in N}\mathbf{P}(y_n|x_n,h,\mathbf{s})\]
+\[\mathbf{P}(D|h,s)\propto\prod_{n \in N}\mathbf{P}(y_n|x_n,h,\mathbf{s})\]
 
-The term \(\mathbf{P}(x_n \in D^+)\) is constant with respect to \(h\) and can therefore be dropped in the proportionality statement. We are left with calculating \(\mathbf{P}(y_n|x_n,h,\mathbf{s})\). The following \textit{generative description} is a useful tool in understanding how \(y_n\) is produced when there is a sampling function.
+We are left with calculating \(\mathbf{P}(y_n|x_n,h,\mathbf{s})\). The following \textit{generative description} is a useful tool in understanding how \(y_n\) is produced when there is a sampling function.
 
 \begin{enumerate}
 	\item Consider as given an input \(x_n\), a predictor \(h\), and a sampling function \(\mathbf{s}\). The predictor \(h\) encodes a probability distribution over \(Y\) through the function \(f_h(x_n,y_n)\).
@@ -225,7 +225,7 @@ The term \(\mathbf{P}(x_n \in D^+)\) is constant with respect to \(h\) and can t
     \end{enumerate}
 \end{enumerate}
 
-We now use the generative description to produce a recursive equation for \(\mathbf{P}(y_n|x_n,h,\mathbf{s})\). Let \(y \in Y\) be the first candidate for \(y_n\). If \(y\) is accepted, this probability is equal to 1 if \(y_n = y\) and 0 otherwise, given by the indicator function \(\left [y_n = y\right ]\).
+We now use the generative description to produce a recursive equation for \(\mathbf{P}(y_n|x_n,h,\mathbf{s})\). Let \(y \in Y\) be the first candidate for \(y_n\). If \(y\) is accepted, the probability of getting \(y_n\) is equal to 1 if \(y_n = y\) and 0 if \(y_n \neq y\). We use the indicator function notation \(\left [y_n = y\right ]\) to represent this binary output.
 
 If \(y\) is not accepted, then the probability reverts to the original value of \(\mathbf{P}(y_n|x_n,h,\mathbf{s})\). Putting it together, the probabilty of ultimately accepting \(y_n\) comes to
 
@@ -242,15 +242,15 @@ With the algebraic manipulation documented in appendix \ref{appendix:solving}, w
 
 \begin{align}
 \label{eq:bias_corrected_prob}
-\mathbf{P}(y_n|x_n,h,\mathbf{s})=\frac{f_h(x_n,y_n)\mathbf{s}(s_n,y_n)}{\sum_{y \in Y}f_h(x_n,y)\mathbf{s}(x_n,y)} &
-\qquad\mathbf{P}(y_n|x_n,h,\mathbf{s})=\frac{f_h(x_n,y_n)\mathbf{s}(s_n,y_n)}{\int_{y \in Y}f_h(x_n,y)\mathbf{s}(x_n,y)}
+\mathbf{P}(y_n|x_n,h,\mathbf{s})=\frac{f_h(x_n,y_n)\mathbf{s}(x_n,y_n)}{\sum_{y \in Y}f_h(x_n,y)\mathbf{s}(x_n,y)} &
+\qquad\mathbf{P}(y_n|x_n,h,\mathbf{s})=\frac{f_h(x_n,y_n)\mathbf{s}(x_n,y_n)}{\int_{y \in Y}f_h(x_n,y)\mathbf{s}(x_n,y)}
 \end{align}
 
 The feasibility of computing the sum or integral term depends on the structure of \(Y\), but it is at least easy when \(Y\) is finite and small enough to be enumerated by a machine.
 
 \subsection{Formula for Negative Log-Likelihood}
 
-Equation~\eqref{eq:bias_corrected_prob} provides all the tools needed to assign relative posterior probabilities to predictors. We derive a negative log likelihood loss function starting with the relative Bayes formula.
+Equation~\eqref{eq:bias_corrected_prob} provides all of the tools necessary to assign relative posterior probabilities to predictors. We derive a negative log likelihood-loss function starting with the relative Bayes formula.
 
 \[\mathbf{P}(h|D,\mathbf{s})\propto\prod_{n \in N} \left[\mathbf{P}(y_n|x_n,h,\mathbf{s})\right]\mathbf{P}(h)\]
 
@@ -270,19 +270,22 @@ Finally, derive a negative log-likelihood loss function on \(h\):
 \begin{enumerate}
 	\item It is a \textit{binary classification} in that \(Y = \{0, 1\}\).
 	\item The input space \(X\) is a list of real valued features. \(F\) denotes a finite set of features, \(X = \mathbb{R} ^{|F|}\).
-	\item Each predictor \(h \in H\) is parameterized by \(h = (c, \mathbf{w})\) where \(c \in \mathbb{R}\) is the intercept and \(\mathbf{w} \in \mathbb{R}^{|F|}\) is an \(|F|\)-dimensional vector of weights corresponding to each input feature.
-          \item Each hypothesis \((c, \mathbf{w}) \in H\) corresponds to the following probability distribution function:
-          \[f_{c,\mathbf{w}}(x_n, y_n)=\frac{e^{y_n \cdot (c+\mathbf{w} \cdot x_n)}}{1+e^{c+\mathbf{w} \cdot x_n}}\]
+	\item Each predictor \(h \in H\) is parameterized by \(h = (c, \mathbf{w})\) where \(c \in \mathbb{R}\) is the intercept and \(\mathbf{w} \in \mathbb{R}^{|F|}\) is an \(|F|\)-dimensional vector of weights corresponding to each feature.
+          \item Each hypothesis \((c, \mathbf{w}) \in H\) corresponds to the following PDF, given here in both normalized and unnormalized form.
+          \begin{align}
+          \hat{f}_{c,\mathbf{w}}(x_n, y_n)=\frac{e^{y_n \cdot (c+\mathbf{w} \cdot x_n)}}{1+e^{c+\mathbf{w} \cdot x_n}} &
+          \qquad f_{c,\mathbf{w}}(x_n, y_n)=e^{y_n \cdot (c+\mathbf{w} \cdot x_n)}
+         \end{align}
 \end{enumerate}
 
 Use equation~\eqref{eq:bias_corrected_prob} to get
 
-\[\mathbf{P}(y_n|x_n,h,\mathbf{s})=\frac{f_h(x_n,y_n)\mathbf{s}(s_n,y_n)}{\sum_{y \in Y}f_h(x_n,y)\mathbf{s}(x_n,y)}=\frac{e^{y_n \cdot (c+\mathbf{w} \cdot x_n)}\mathbf{s}(s_n,y_n)}{\mathbf{s}(x_n,0)+e^{c+\mathbf{w} \cdot x_n}\mathbf{s}(x_n,1)}.\]
+\[\mathbf{P}(y_n|x_n,h,\mathbf{s})=\frac{f_h(x_n,y_n)\mathbf{s}(x_n,y_n)}{\sum_{y \in Y}f_h(x_n,y)\mathbf{s}(x_n,y)}=\frac{e^{y_n \cdot (c+\mathbf{w} \cdot x_n)}\mathbf{s}(x_n,y_n)}{\mathbf{s}(x_n,0)+e^{c+\mathbf{w} \cdot x_n}\mathbf{s}(x_n,1)}.\]
 
 These problems are often framed to focus on the probability of the \textit{target condition} \(y_n = 1\). This target condition is usually the rare event that triggered the decision to use biased sampling, and would correspond to the lion image in section \ref{section:lion} and the visit in section \ref{section:visit}. We can solve for it as follows:
 
 \begin{align}
-\mathbf{P}(y_n=1|x_n,h,\mathbf{s})=\frac{e^{c+\mathbf{w} \cdot x_n}\mathbf{s}(s_n,1)}{\mathbf{s}(x_n,0)+e^{c+\mathbf{w} \cdot x_n}\mathbf{s}(x_n,1)}=\frac{e^{c+\mathbf{w} \cdot x_n}}{\mathbf{s}_r(x_n)+e^{c+\mathbf{w} \cdot x_n}} &
+\mathbf{P}(y_n=1|x_n,h,\mathbf{s})=\frac{e^{c+\mathbf{w} \cdot x_n}\mathbf{s}(x_n,1)}{\mathbf{s}(x_n,0)+e^{c+\mathbf{w} \cdot x_n}\mathbf{s}(x_n,1)}=\frac{e^{c+\mathbf{w} \cdot x_n}}{\mathbf{s}_r(x_n)+e^{c+\mathbf{w} \cdot x_n}} &
 \qquad \textrm{where} \quad \mathbf{s}_r(x_n)=\frac{\mathbf{s}(x_n, 0)}{\mathbf{s}(x_n, 1)}
 \end{align}
 
@@ -339,28 +342,28 @@ Here we start with equation~\eqref{eq:bias_corrected_setup} and go through the s
 
 Break out the summation to get
 
-\[\mathbf{P}(y_n|x_n,h,\mathbf{s})=\sum_{y \in Y}\hat{f}_h(x_n,y)\mathbf{s}(x_n,y)\left [y_n = y\right ] +\sum_{y \in Y}\hat{f}_h(x_n,y)(1-\mathbf{s}(s_n,y))P(y_n|x_n,h,\mathbf{s}).\]
+\[\mathbf{P}(y_n|x_n,h,\mathbf{s})=\sum_{y \in Y}\hat{f}_h(x_n,y)\mathbf{s}(x_n,y)\left [y_n = y\right ] +\sum_{y \in Y}\hat{f}_h(x_n,y)(1-\mathbf{s}(x_n,y))P(y_n|x_n,h,\mathbf{s}).\]
 
 In the first sum, the only non-zero addend is \(y = y_n\). Therefore, we can replace \(y\) with \(y_n\) and remove the summation and indicator function. In the second sum, factor out \(P(y_n|x_n,h,\mathbf{s})\) which does not contain summation index \(y\).
 
-\[\mathbf{P}(y_n|x_n,h,\mathbf{s})=\hat{f}_h(x_n,y_n)\mathbf{s}(x_n,y_n) +P(y_n|x_n,h,\mathbf{s})\sum_{y \in Y}\hat{f}_h(x_n,y)(1-\mathbf{s}(s_n,y))\]
+\[\mathbf{P}(y_n|x_n,h,\mathbf{s})=\hat{f}_h(x_n,y_n)\mathbf{s}(x_n,y_n) +P(y_n|x_n,h,\mathbf{s})\sum_{y \in Y}\hat{f}_h(x_n,y)(1-\mathbf{s}(x_n,y))\]
 
 Collect the term \(\mathbf{P}(y_n|x_n,h,\mathbf{s})\) and distribute \(\hat{f}_h(x_n,y)\) in the remaining summation.
 
-\[\mathbf{P}(y_n|x_n,h,\mathbf{s})\left [ 1 - \sum_{y \in Y}\hat{f}_h(x_n,y)(1-\mathbf{s}(x_n,y)) \right ]=\hat{f}_h(x_n,y_n)\mathbf{s}(s_n,y_n) \]
+\[\mathbf{P}(y_n|x_n,h,\mathbf{s})\left [ 1 - \sum_{y \in Y}\hat{f}_h(x_n,y)(1-\mathbf{s}(x_n,y)) \right ]=\hat{f}_h(x_n,y_n)\mathbf{s}(x_n,y_n) \]
 
-\[\mathbf{P}(y_n|x_n,h,\mathbf{s})\left [ 1 - \sum_{y \in Y}\hat{f}_h(x_n,y)+\sum_{y \in Y}\hat{f}_h(x_n,y)\mathbf{s}(x_n,y) \right ]=\hat{f}_h(x_n,y_n)\mathbf{s}(s_n,y_n) \]
+\[\mathbf{P}(y_n|x_n,h,\mathbf{s})\left [ 1 - \sum_{y \in Y}\hat{f}_h(x_n,y)+\sum_{y \in Y}\hat{f}_h(x_n,y)\mathbf{s}(x_n,y) \right ]=\hat{f}_h(x_n,y_n)\mathbf{s}(x_n,y_n) \]
 
 From equation~\eqref{eq:normalized_probability_model} we know that for all possible inputs \(x\), \(\sum_{y \in Y} \hat{f}_h(x, y) = 1\). We can simplify as follows:
 
-\[\mathbf{P}(y_n|x_n,h,\mathbf{s})\left [ 1 - 1+\sum_{y \in Y}\hat{f}_h(x_n,y)\mathbf{s}(s_n,y) \right ]=\hat{f}_h(x_n,y_n)\mathbf{s}(x_n,y_n) \]
+\[\mathbf{P}(y_n|x_n,h,\mathbf{s})\left [ 1 - 1+\sum_{y \in Y}\hat{f}_h(x_n,y)\mathbf{s}(x_n,y) \right ]=\hat{f}_h(x_n,y_n)\mathbf{s}(x_n,y_n) \]
 
-\[\mathbf{P}(y_n|x_n,h,\mathbf{s})\left [\sum_{y \in Y}\hat{f}_h(x_n,y)\mathbf{s}(s_n,y) \right ]=\hat{f}_h(x_n,y_n)\mathbf{s}(x_n,y_n) \]
+\[\mathbf{P}(y_n|x_n,h,\mathbf{s})\left [\sum_{y \in Y}\hat{f}_h(x_n,y)\mathbf{s}(x_n,y) \right ]=\hat{f}_h(x_n,y_n)\mathbf{s}(x_n,y_n) \]
 
 Note that \(\hat{f}_h\) is a factor on both sides of the equation, and by definition  in equation~\eqref{eq:normalized_probability_model}, \(\hat{f}_h\) is a proportional to \(f_h\). Therefore, \(\hat{f}_h\) can be reduced to \(f\), and after dividing the final form can be given as equation~\eqref{eq:bias_corrected_prob}.
 
 \begin{equation}
-\mathbf{P}(y_n|x_n,h,\mathbf{s})=\dfrac{f_h(x_n,y_n)\mathbf{s}(s_n,y_n)}{\sum_{y \in Y}f_h(x_n,y)\mathbf{s}(x_n,y)}
+\mathbf{P}(y_n|x_n,h,\mathbf{s})=\dfrac{f_h(x_n,y_n)\mathbf{s}(x_n,y_n)}{\sum_{y \in Y}f_h(x_n,y)\mathbf{s}(x_n,y)}
 \tag{\ref{eq:bias_corrected_prob}}
 \end{equation}
 
