@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.7.14)  9 FEB 2022 15:07
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.7.14)  9 MAR 2022 17:38
 entering extended mode
 **./bias-correction-paper.tex
 (bias-correction-paper.tex
@@ -737,11 +737,7 @@ tex.def
 File: l3backend-pdftex.def 2021-05-07 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count323
 \l__pdf_internal_box=\box113
-) (bias-correction-paper.aux
-
-LaTeX Warning: Label `train_on_all_data' multiply defined.
-
-)
+) (bias-correction-paper.aux)
 \openout1 = `bias-correction-paper.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 15.
@@ -825,12 +821,12 @@ your preamble.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-LaTeX Font Info:    Trying to load font information for U+msa on input line 31.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 32.
 
 (C:\Users\maxsk\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 31.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 32.
 
 
 (C:\Users\maxsk\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
@@ -838,28 +834,28 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 
 LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <153.57375> not available
-(Font)              size <24.88> substituted on input line 52.
+(Font)              size <24.88> substituted on input line 53.
 
 [1{C:/Users/maxsk/AppData/Local/MiKTeX/pdftex/config/pdftex.map}
 
-] [2] [3]
-[4] [5] [6] [7] [8] [9] [10] [11] [12] [13] (bias-correction-paper.aux)
+] [2]
+Underfull \vbox (badness 4779) has occurred while \output is active []
+
+ [3]
+[4] [5] [6] [7] [8] [9] [10] [11] [12] (bias-correction-paper.aux)
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 128.69374pt have occurred.
-
-
-LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
  24922 strings out of 478864
  631319 string characters out of 2848660
- 1040560 words of memory out of 3000000
+ 1041560 words of memory out of 3000000
  42423 multiletter control sequences out of 15000+600000
  414391 words of font info for 68 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 99i,13n,103p,805b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 99i,13n,103p,780b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
 <C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
 cmbx10.pfb><C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
 fonts/cm/cmbx12.pfb><C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts/type1/p
@@ -885,9 +881,9 @@ axsk/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy5.pfb><C:
 .pfb><C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/
 cm/cmti10.pfb><C:/Users/maxsk/AppData/Local/Programs/MiKTeX/fonts/type1/public/
 amsfonts/symbols/msbm10.pfb>
-Output written on bias-correction-paper.pdf (13 pages, 317807 bytes).
+Output written on bias-correction-paper.pdf (12 pages, 318135 bytes).
 PDF statistics:
- 158 PDF objects out of 1000 (max. 8388607)
+ 154 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  13 words of extra memory for PDF output out of 10000 (max. 10000000)
 
