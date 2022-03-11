@@ -22,7 +22,7 @@
   }
 }
 
-\author{Max Sklar\\ Local Maximum Labs \\ March 14, 2022}
+\author{Max Sklar\\ Local Maximum Labs \\ March 11, 2022}
 \date{}
 
 \maketitle
@@ -47,7 +47,7 @@ When an accurate training set is unavailable either by design or circumstance, a
 
 \textbf{Fortunately, when the sampling function is known, there is a method that can learn the concept from the remaining evidence available, and produce a model to fit the \(original\) dataset.}
 
-In this paper, we will fully document this method. We analyze the problem through the \textit{Bayesian framework} for supervised machine learning reviewed in section \ref{framework}. Key to this framework is the \textit{posterior probability distribution} over potential models, which allows a search algorithm to discriminate between them by their projected performance. When a bias sample is provided, the posterior distribution formula can be properly corrected as detailed in sections \ref{section:problem} and \ref{section:solution} to counteract this bias.
+In this paper, we will fully document this method. We analyze the problem through the \textit{Bayesian framework} for supervised machine learning reviewed in section \ref{framework}. Key to this framework is the \textit{posterior probability distribution} over potential models, which allows a search algorithm to discriminate between them by their projected performance. When a biased sample is provided, the posterior distribution formula can be properly corrected as detailed in sections \ref{section:problem} and \ref{section:solution} to counteract this bias.
 
 Unlike ad-hoc methods for correcting bias after a model has been created, this method bakes the bias-counteracting term into the learning process itself and is shown here to be consistent with first principles. It also has been successfully deployed in major commerical product launches, as documented in section \ref{section:visit}.
 
@@ -91,7 +91,7 @@ In the image recognition example, bias correction is desirable. In other cases, 
 
 An iteration of Foursquare’s attribution model\cite{visitprediction} provides a clear example. The company's attribution product measures the ability of an advertisement to drive consumers to physical locations such as a retail chain. In order to estimate causality, the Foursquare data pipeline must first learn the base probability that any given individual will visit that chain on a given day.
 
-Foursquare's data set has many examples of visits, but examples of people who “did not visit” on any given day outnumber visits by several orders of magnitude. Therefore, it makes sense to downsample those non-visits. Because the value of an ad measurement product is in its accuracy, the bias sampling must be accounted for precisely. This was ultimately achieved through the bias correction formula for logistic regression in section \ref{section:logistic}.
+Foursquare's data set has many examples of visits, but examples of people who “did not visit” on any given day outnumber visits by several orders of magnitude. Therefore, it makes sense to downsample those non-visits. Because the value of an ad measurement product is in its accuracy, the sampling bias must be accounted for precisely. This was ultimately achieved through the bias correction formula for logistic regression in section \ref{section:logistic}.
 
 \subsection{Similar and Adjacent Work}
 
@@ -329,7 +329,7 @@ For the regularization term, we can use \textit{L2} or \textit{ridge regression}
 \qquad\mathbf{r}(c,\mathbf{w})=\frac{1}{2}\lambda(\mathbf{w} \cdot \mathbf{w})
 \end{align}
 
-This is equivalent to putting a normal (or gaussian) prior distribution on each weight independently with a mean of \(0\) and a \textit{precision} of lambda. A large lambda produces a stronger prior which will encourage weights closer to 0. The parameter \(c\) is not given a gaussian prior here, and without it we are actually assuming a uniform, improper prior over all real numbers. It is actually common not to regularize the intercept.
+This is equivalent to putting a normal (or gaussian) prior distribution on each weight independently with a mean of \(0\) and a \textit{precision} of lambda. A large lambda produces a stronger prior which will encourage weights closer to 0. The parameter \(c\) is not given a gaussian prior here, and without it we are actually assuming a uniform, improper prior over all real numbers. It is common practice not to regularize the intercept.
 
 Use equation~\eqref{eq:bias_corrected_loss_function} to derive the negative log-likelihood loss function by plugging in formulas from equations \eqref{eq:corrected_logistic_loss} and \eqref{eq:l2_regularization}.
 
@@ -432,5 +432,5 @@ If the sampling was uniform where \(\mathbf{s}(x,y)=p\), equation~\eqref{eq:bias
 
 \end{thebibliography}
 
-This paper along with revisions is posted at github as https://github.com/maxsklar/bias-correction-paper. See readme for contact information. Local Maximum Labs is an ongoing effort create an disseminate AI knowledge by Max Sklar, host of The Local Maximum podcast.
+This document along with revisions is posted at github as https://github.com/maxsklar/bias-correction-paper. See readme for contact information. Local Maximum Labs is an ongoing effort create an disseminate knowledge on intelligent computing.
 \end{document}
